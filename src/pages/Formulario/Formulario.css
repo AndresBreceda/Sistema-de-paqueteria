@@ -5,3 +5,16 @@ body{
 .botton{
     background-color: blue;
 }
+
+/* Formulario.css */
+
+.full-width-title {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #e0e0e0; /* Customize this if you need a different background color */
+    font-size: 1.5rem; /* Adjust the font size as needed */
+    font-weight: bold;
+    color: #333; /* Adjust text color */
+  }
+  

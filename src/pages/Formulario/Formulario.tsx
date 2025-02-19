@@ -1,9 +1,22 @@
 import { useState } from "react";
-import { Mail, User, MessageSquare } from "lucide-react";
-import Header from "../../Components/Landing/Header/Header";
+import { 
+Mail,
+User,
+MessageSquare,
+House,
+HousePlus,
+Building2,
+Send,
+Phone,
+Ellipsis
+} from "lucide-react";
 import './Formulario.css';
 
-export default function Formulario() {
+interface FormularioProps {
+  who: string;
+}
+
+const Formulario: React.FC<FormularioProps> = ({ who }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -52,13 +65,11 @@ export default function Formulario() {
 
   return (
     <div>
-      {/* <Header /> */}
       <div className="p-6 bg-white rounded-2xl shadow-xl">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <p className="text-gray-700 text-center bg-gray-300">
-            Remitente-Envia
-          </p>
-
+        <p className="full-width-title">
+          {who}
+        </p>
           {/* Nombre */}
           <div>
             <label htmlFor="name" className="block text-gray-600 font-medium">
@@ -85,7 +96,7 @@ export default function Formulario() {
               Domicilio:
             </label>
             <div className="relative flex items-center">
-              <Mail className="absolute left-3 text-gray-400" size={20} />
+              <House className="absolute left-3 text-gray-400" size={20} />
               <input
                 type="text"
                 id="domicilio"
@@ -105,15 +116,15 @@ export default function Formulario() {
             Colonia:
             </label>
             <div className="relative flex items-start">
-              <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} />
-              <textarea
+              <HousePlus className="absolute left-3 top-4 text-gray-400" size={20} />
+              <input
                 id="colonia"
                 name="colonia"
                 placeholder="Coloque la colonia a la que esta destidado el paquete."
                 value={formData.colonia}
                 onChange={handleChange}
                 required
-                className="w-full pl-10 pr-4 py-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 transition"
+                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
           </div>
@@ -123,15 +134,15 @@ export default function Formulario() {
             Ciudad:
             </label>
             <div className="relative flex items-start">
-              <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} />
-              <textarea
+              <Building2 className="absolute left-3 top-4 text-gray-400" size={20} />
+              <input
                 id="ciudad"
                 name="ciudad"
                 placeholder="Coloque la ciudad a la que esta destidado el paquete."
                 value={formData.ciudad}
                 onChange={handleChange}
                 required
-                className="w-full pl-10 pr-4 py-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 transition"
+                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
           </div>
@@ -141,15 +152,15 @@ export default function Formulario() {
             Email:
             </label>
             <div className="relative flex items-start">
-              <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} />
-              <textarea
+              <Mail className="absolute left-3 top-4 text-gray-400" size={20} />
+              <input
                 id="email"
                 name="email"
                 placeholder="Coloque un email valido."
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full pl-10 pr-4 py-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 transition"
+                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
           </div>
@@ -159,15 +170,15 @@ export default function Formulario() {
             Codigo Postal (CP):
             </label>
             <div className="relative flex items-start">
-              <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} />
-              <textarea
+              <Send className="absolute left-3 top-4 text-gray-400" size={20} />
+              <input
                 id="cp"
                 name="cp"
                 placeholder="Coloque un codigo postal valido."
                 value={formData.cp}
                 onChange={handleChange}
                 required
-                className="w-full pl-10 pr-4 py-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 transition"
+                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
           </div>
@@ -177,15 +188,15 @@ export default function Formulario() {
             RFC:
             </label>
             <div className="relative flex items-start">
-              <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} />
-              <textarea
+              <Ellipsis className="absolute left-3 top-4 text-gray-400" size={20} />
+              <input
                 id="rfc"
                 name="rfc"
                 placeholder="Coloque un rfc valido."
                 value={formData.rfc}
                 onChange={handleChange}
                 required
-                className="w-full pl-10 pr-4 py-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 transition"
+                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
           </div>
@@ -195,15 +206,15 @@ export default function Formulario() {
             Telefono:
             </label>
             <div className="relative flex items-start">
-              <MessageSquare className="absolute left-3 top-4 text-gray-400" size={20} />
-              <textarea
+              <Phone className="absolute left-3 top-4 text-gray-400" size={20} />
+              <input
                 id="telefono"
                 name="telefono"
                 placeholder="Coloque un telefono valido."
                 value={formData.telefono}
                 onChange={handleChange}
                 required
-                className="w-full pl-10 pr-4 py-4 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-32 transition"
+                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
               />
             </div>
           </div>
@@ -236,3 +247,5 @@ export default function Formulario() {
     </div>
   );
 }
+
+export default Formulario;
