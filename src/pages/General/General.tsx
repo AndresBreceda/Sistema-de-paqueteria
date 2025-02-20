@@ -1,17 +1,20 @@
-import Header from "../../Components/Header/Header";
-import FormularioNew from "../Formulario/FormularioNew";
-import Paquetes from "../Paquetes/Paquetes";
+import { Header } from "../../Components/Header";
+import { Formulario } from "../Formulario";
+import { Paquetes } from "../Paquetes";
+import './General.css';
 
-export default function General(){
-    return(
+export default function General() {
+    return (
         <div>
             <Header />
 
-            <div className="col-span-3 col-start-4 bg-white m-2 rounded-2xl flex items-center space-x-4 p-2">
+            <div className="mt-20 mb-20 bg-white p-6 shadow-md rounded-lg">
                 <Paquetes />
             </div>
 
-            <FormularioNew />
+            <div className="bg-white p-6 shadow-md rounded-lg">
+                <Formulario />
+            </div>
         </div>
     );
 }

@@ -1,0 +1,1 @@
+export { default as Paquetes } from './Paquetes';

@@ -1,251 +1,66 @@
-import { useState } from "react";
-import { 
-Mail,
-User,
-MessageSquare,
-House,
-HousePlus,
-Building2,
-Send,
-Phone,
-Ellipsis
-} from "lucide-react";
+import { Hash, House, Send, User } from "lucide-react";
+import { ChangeEvent, useState } from "react";
 import './Formulario.css';
 
-interface FormularioProps {
-  who: string;
-}
-
-const Formulario: React.FC<FormularioProps> = ({ who }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-    domicilio: "",
-    colonia: "",
-    ciudad: "",
-    cp: "",
-    rfc: "",
-    telefono:"",
-  });
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const handleChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+export default function Formulario() {
+    const [formData, setFormData] = useState({    
+        quien: "",
+        guia: "",
+        camion: "",
+        paquetes: "",
+        inicio: "",
+        destinatario: "",
     });
-  };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    setShowConfirmation(true);
+    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+        const { name, value } = e.target;
+        setFormData({
+          ...formData,
+          [name]: value,
+        });
+    }
 
-    setFormData(
-      { 
-      name: "", 
-      email: "",
-      message: "",
-      domicilio:"",
-      colonia: "",
-      ciudad:"",
-      cp:"", 
-      rfc:"", 
-      telefono:"", 
-      }
+    function handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        console.log(formData);
+    }
+
+    return (
+        <div className="p-6 bg-gray-100 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold mb-4 text-blue-700">Información del paquete</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                    {[
+                        { label: "Quien manda:", name: "quien", icon: <User size={20} />, placeholder: "Nombre" },
+                        { label: "Numero de guia:", name: "guia", icon: <Hash size={20} />, placeholder: "no1234" },
+                        { label: "Numero de camion:", name: "camion", icon: <Hash size={20} />, placeholder: "no1234" },
+                        { label: "Numero de paquetes:", name: "paquetes", icon: <Send size={20} />, placeholder: "1", type: "number" },
+                        { label: "Ciudad de inicio:", name: "inicio", icon: <House size={20} />, placeholder: "Aguascalientes" },
+                        { label: "Ciudad de destino:", name: "destino", icon: <House size={20} />, placeholder: "Destino" },
+                        { label: "Nombre del destinatario:", name: "destinatario", icon: <User size={20} />, placeholder: "Nombre del destinatario" },
+                    ].map(({ label, name, icon, placeholder, type = "text" }) => (
+                        <div key={name} className="flex items-center gap-4">
+                            <label htmlFor={name} className="text-gray-700 font-medium w-48 text-right">
+                                {label}
+                            </label>
+                            <div className="relative flex items-center w-full">
+                                <span className="absolute left-3 text-gray-500">{icon}</span>
+                                <input
+                                    type={type}
+                                    id={name}
+                                    name={name}
+                                    placeholder={placeholder}
+                                    value={formData[name as keyof typeof formData]}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <button type="submit" className="button">Enviar</button>
+            </form>
+        </div>
     );
-  };
-
-  const handleClose = () => {
-    setShowConfirmation(false);
-  };
-
-  return (
-    <div>
-      <div className="p-6 bg-white rounded-2xl shadow-xl">
-        <form onSubmit={handleSubmit} className="space-y-4">
-        <p className="full-width-title">
-          {who}
-        </p>
-          {/* Nombre */}
-          <div>
-            <label htmlFor="name" className="block text-gray-600 font-medium">
-              Nombre:
-            </label>
-            <div className="relative flex items-center">
-              <User className="absolute left-3 text-gray-400" size={20} />
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Escriba su nombre aquí."
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          {/* Domicilio */}
-          <div>
-            <label htmlFor="domicilio" className="block text-gray-600 font-medium">
-              Domicilio:
-            </label>
-            <div className="relative flex items-center">
-              <House className="absolute left-3 text-gray-400" size={20} />
-              <input
-                type="text"
-                id="domicilio"
-                name="domicilio"
-                placeholder="Escriba un domicilio válido aquí."
-                value={formData.domicilio}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          {/* Colonia */}
-          <div>
-            <label htmlFor="Colonia" className="block text-gray-600 font-medium">
-            Colonia:
-            </label>
-            <div className="relative flex items-start">
-              <HousePlus className="absolute left-3 top-4 text-gray-400" size={20} />
-              <input
-                id="colonia"
-                name="colonia"
-                placeholder="Coloque la colonia a la que esta destidado el paquete."
-                value={formData.colonia}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="Ciudad" className="block text-gray-600 font-medium">
-            Ciudad:
-            </label>
-            <div className="relative flex items-start">
-              <Building2 className="absolute left-3 top-4 text-gray-400" size={20} />
-              <input
-                id="ciudad"
-                name="ciudad"
-                placeholder="Coloque la ciudad a la que esta destidado el paquete."
-                value={formData.ciudad}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="Email" className="block text-gray-600 font-medium">
-            Email:
-            </label>
-            <div className="relative flex items-start">
-              <Mail className="absolute left-3 top-4 text-gray-400" size={20} />
-              <input
-                id="email"
-                name="email"
-                placeholder="Coloque un email valido."
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="CodiogoPostal" className="block text-gray-600 font-medium">
-            Codigo Postal (CP):
-            </label>
-            <div className="relative flex items-start">
-              <Send className="absolute left-3 top-4 text-gray-400" size={20} />
-              <input
-                id="cp"
-                name="cp"
-                placeholder="Coloque un codigo postal valido."
-                value={formData.cp}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="RFC" className="block text-gray-600 font-medium">
-            RFC:
-            </label>
-            <div className="relative flex items-start">
-              <Ellipsis className="absolute left-3 top-4 text-gray-400" size={20} />
-              <input
-                id="rfc"
-                name="rfc"
-                placeholder="Coloque un rfc valido."
-                value={formData.rfc}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="Telefono" className="block text-gray-600 font-medium">
-            Telefono:
-            </label>
-            <div className="relative flex items-start">
-              <Phone className="absolute left-3 top-4 text-gray-400" size={20} />
-              <input
-                id="telefono"
-                name="telefono"
-                placeholder="Coloque un telefono valido."
-                value={formData.telefono}
-                onChange={handleChange}
-                required
-                className="w-full pl-10 pr-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-              />
-            </div>
-          </div>
-
-          {/* Botón */}
-          <button
-            type="submit"
-            className="botton  w-full py-2 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
-          >
-            Enviar
-          </button>
-        </form>
-
-        {/* Mensaje de confirmación */}
-        {showConfirmation && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-xl shadow-lg text-center">
-              <h2 className="text-lg font-bold text-blue-500">Mensaje Enviado</h2>
-              <p>Paquete regisrado.</p>
-              <button
-                onClick={handleClose}
-                className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
-              >
-                Cerrar
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
 }
-
-export default Formulario;
