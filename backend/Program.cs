@@ -1,6 +1,9 @@
+
+// using Logipackdb.Models;
+// using MongoDB.Driver;
+
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using MongoConfiguration;
 
 var builder = WebApplication.CreateBuilder(args);
 //corre en http://localhost:5000/swagger/index.html
@@ -20,35 +23,66 @@ builder.Services.AddCors(options =>
                         .AllowAnyHeader());
 });
 
-// 🔹 Configurar MongoDB
-builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDBSettings"));
-builder.Services.AddSingleton<IMongoClient>(sp =>
+var mongoSettings = builder.Configuration.GetSection("MongoDB").Get<MongoDbSettings>();
+
+Console.WriteLine($"Connection String: {mongoSettings?.ConnectionString}");
+Console.WriteLine($"Database Name: {mongoSettings?.DatabaseName}");
+
+
+// Configuración de MongoDB
+builder.Services.Configure<MongoDbSettings>(
+builder.Configuration.GetSection("MongoDB"));
+
+builder.Services.AddSingleton<IMongoClient>(s =>
 {
-    var settings = sp.GetRequiredService<IOptions<MongoDBSettings>>().Value;
+    var settings = s.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+
+    if (string.IsNullOrEmpty(settings.ConnectionString))
+    {
+        throw new ArgumentNullException(nameof(settings.ConnectionString), "La cadena de conexión a MongoDB no puede ser nula o vacía.");
+    }
+
     return new MongoClient(settings.ConnectionString);
 });
 
-builder.Services.AddScoped<IMongoDatabase>(sp =>
+builder.Services.AddScoped<PedidosService>();
+
+
+builder.Services.AddScoped(s =>
 {
-    var client = sp.GetRequiredService<IMongoClient>();
-    var settings = sp.GetRequiredService<IOptions<MongoDBSettings>>().Value;
+    var settings = s.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+    var client = s.GetRequiredService<IMongoClient>();
     return client.GetDatabase(settings.DatabaseName);
 });
 
-var dataBase = WebApplication.CreateBuilder(args);
-
-// Cargar configuración de MongoDB desde appsettings.json
-builder.Services.Configure<MongoConfiguration.MongoDBSettings>(
-    builder.Configuration.GetSection("MongoDB"));
-
-// Registrar MongoDbService como Singleton
-builder.Services.AddSingleton<MongoDbService>();
-
-var app1 = dataBase.Build();
-
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+
+// Obtener el servicio de UsuarioService
+using (var scope = app.Services.CreateScope())
+{
+    var usuarioService = scope.ServiceProvider.GetRequiredService<PedidosService>();
+
+    // Crear un usuario de prueba
+    // var usuarioPrueba = new Pedidos
+    // {
+    //     nombre = "Andres",
+    //     email = "andres@email.com"
+    // };
+
+    // // Insertarlo en MongoDB
+    // await usuarioService.CreateUsuarioAsync(usuarioPrueba);
+    // Console.WriteLine("usuario agregado");
+    
+    
+}
+
+app.UseAuthorization();
+app.MapControllers();
 
 // 🔹 Configurar middleware
 if (app.Environment.IsDevelopment())
