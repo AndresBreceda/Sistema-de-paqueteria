@@ -18,7 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp",
-        policy => policy.WithOrigins("http://localhost:3000") // Dirección del frontend en React
+        policy => policy.WithOrigins("http://localhost:5173") // Dirección del frontend en React
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
@@ -67,18 +67,6 @@ using (var scope = app.Services.CreateScope())
 {
     var usuarioService = scope.ServiceProvider.GetRequiredService<PedidosService>();
 
-    // Crear un usuario de prueba
-    // var usuarioPrueba = new Pedidos
-    // {
-    //     nombre = "Andres",
-    //     email = "andres@email.com"
-    // };
-
-    // // Insertarlo en MongoDB
-    // await usuarioService.CreateUsuarioAsync(usuarioPrueba);
-    // Console.WriteLine("usuario agregado");
-    
-    
 }
 
 app.UseAuthorization();
@@ -95,31 +83,6 @@ app.UseHttpsRedirection(); //activar esta variable a la hora de production
 app.UseCors("AllowReactApp"); // Aplicar política de CORS
 app.MapControllers();
 
-// 🔹 Ruta de prueba "WeatherForecast"
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
 
 app.Run();
 
-// 🔹 Definición del record
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

@@ -5,7 +5,7 @@ public class Pedidos
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string? _id { get; set; }
+    public string? id { get; set; }
     
     public string nombre_remitente { get; set; } = null!;
     
