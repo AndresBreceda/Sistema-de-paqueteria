@@ -39,26 +39,26 @@ export default function Paquetes(){
 
   return (
     <div className="p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold mb-6 text-blue-700 text-center">Próximos Paquetes</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-blue-900 text-center">Próximos Paquetes</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {data.map((item: Paquete) => (
           <div
             key={item._id}
             className="border-2 border-blue-300 p-6 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ease-in-out"
           >
-            <strong className="text-lg text-blue-600">Nombre del remitente:</strong> {item.nombre_remitente}
+            <strong className="text-lg text-blue-900">Nombre del remitente:</strong> {item.nombre_remitente}
             <br />
-            <strong className="text-lg text-blue-600">Número del camión:</strong> {item.numero_camion}
+            <strong className="text-lg text-blue-900">Número del camión:</strong> {item.numero_camion}
             <br />
-            <strong className="text-lg text-blue-600">Ciudad de Inicio:</strong> {item.ciudad_inicio}
+            <strong className="text-lg text-blue-900">Ciudad de Inicio:</strong> {item.ciudad_inicio}
             <br />
-            <strong className="text-lg text-blue-600">Ciudad de destino:</strong> {item.ciudad_destino}
+            <strong className="text-lg text-blue-900">Ciudad de destino:</strong> {item.ciudad_destino}
             <br />
-            <strong className="text-lg text-blue-600">Nombre del destinatario:</strong> {item.nombre_destinatario}
+            <strong className="text-lg text-blue-900">Nombre del destinatario:</strong> {item.nombre_destinatario}
             <br />
-            <strong className="text-lg text-blue-600">Número de guía:</strong> {item.numero_guia}
+            <strong className="text-lg text-blue-900">Número de guía:</strong> {item.numero_guia}
             <br />
-            <strong className="text-lg text-blue-600">Número de paquetes:</strong> {item.numero_paquetes}
+            <strong className="text-lg text-blue-900">Número de paquetes:</strong> {item.numero_paquetes}
             <div className="grid grid-cols-2 grid-rows-1 gap-4 mt-10">
               <button>Editar</button>
               <button>Eliminar</button>

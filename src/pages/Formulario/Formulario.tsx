@@ -100,7 +100,7 @@ export default function Formulario() {
 
     return (
         <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-4 text-blue-700">Información del paquete</h2>
+            <h2 className="text-lg font-semibold mb-4 text-blue-900">Información del paquete</h2>
             
             {/* Mensaje de éxito o error */}
             {message.text && (
@@ -134,7 +134,7 @@ export default function Formulario() {
                                     value={formData[name as keyof typeof formData]}
                                     onChange={handleChange}
                                     required
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white text-gray-900"
                                 />
                             </div>
                         </div>

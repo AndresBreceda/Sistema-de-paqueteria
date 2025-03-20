@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Header from "../Header/HeaderFixed";
 import { Mail, LockOpen } from "lucide-react"; 
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +23,8 @@ export default function LandingPage() {
   }
 
   return (
-    <><Header /><div className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full bg-gray-400 flex items-center justify-center">
+    <>
+    <div className="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full bg-gray-400 flex items-center justify-center">
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl w-full px-8 py-12 bg-opacity-70 bg-black rounded-lg shadow-lg">
         {/* Imagen */}
