@@ -5,3 +5,33 @@
     border: 2%;
 
 }
+
+/* Estilo base para los botones */
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo para el botón de eliminar */
+.button-delete {
+    background-color: #ff4d4d; /* Rojo */
+    color: white;
+}
+
+.button-delete:hover {
+    background-color: #ff1a1a; /* Rojo más oscuro al pasar el ratón */
+}
+
+/* Estilo para el botón de editar */
+.button-edit {
+    background-color: #4d94ff; /* Azul */
+    color: white;
+}
+
+.button-edit:hover {
+    background-color: #1a5aff; /* Azul más oscuro al pasar el ratón */
+}

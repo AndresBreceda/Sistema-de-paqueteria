@@ -142,6 +142,13 @@ export default function Formulario() {
                 </div>
                 <button 
                     type="submit" 
+                    className="ml-20"
+                    onClick={()=>setFormData}
+                >
+                    Cancelar
+                </button>
+                <button 
+                    type="submit" 
                     className="button"
                     disabled={mutation.isPending}
                 >

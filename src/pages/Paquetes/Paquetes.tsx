@@ -1,38 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
 import Paquete from "./types";
 import './styles.css';
-
-const fetchData = async () => {
-  try {
-      const response = await fetch("https://localhost:5001/api/Pedidos");
-  
-      // Verificar si la respuesta es válida
-      if (!response.ok) {
-        const errorText = await response.text(); // Intenta obtener el error detallado
-        throw new Error(`HTTP Error: ${response.status} - ${errorText}`);
-      }
-  
-      return response.json();
-    } catch (error) {
-      console.error("Fetch error: ", error); // Log del error en la consola
-      throw error; // React Query manejará este error
-  }
-};
-  
-// Hook personalizado con React Query
-export const useGetData = () => {
-    return useQuery({
-      queryKey: ["data"], // Clave de caché
-      queryFn: fetchData, // Función de fetch
-      refetchInterval: 3 * 60 * 1000, // Refetch cada 3 minutos (en milisegundos)
-      refetchIntervalInBackground: true, // Refetch incluso cuando la ventana no está activa
-      staleTime: 2.5 * 60 * 1000, // Considera los datos obsoletos después de 2.5 minutos
-      retry: 3,
-    });
-};
+import { useGetData, useDeletePedido } from "../../Hooks/Hooks";
 
 export default function Paquetes(){
   const { data, error, isLoading } = useGetData();
+  const { mutate: deletePedido, error: isErrorDelete, isError: isLoadingDelete } = useDeletePedido();
+
+  const handleDelete = (id: any) => {
+    deletePedido(id);
+  };
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -41,6 +17,13 @@ export default function Paquetes(){
     <div className="p-6 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-2xl font-semibold mb-6 text-blue-900 text-center">Próximos Paquetes</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {data.length === 0 &&
+          <div className="flex justify-center items-cente">
+            <div className="text-lg text-blue-900 rounded-lg">
+            ...No hay paquetes...
+            </div>
+          </div> 
+        }
         {data.map((item: Paquete) => (
           <div
             key={item._id}
@@ -60,8 +43,11 @@ export default function Paquetes(){
             <br />
             <strong className="text-lg text-blue-900">Número de paquetes:</strong> {item.numero_paquetes}
             <div className="grid grid-cols-2 grid-rows-1 gap-4 mt-10">
-              <button>Editar</button>
-              <button>Eliminar</button>
+              <button className="button-edit">Editar</button>
+              <button className="button-delete" onClick={() => handleDelete(item._id)} disabled={isLoadingDelete}>
+                {isLoadingDelete ? "Eliminando..." : "Eliminar"}
+              </button>
+              {isErrorDelete && <p className="text-red-500">{isErrorDelete.message}</p>}
             </div>
           </div>
         ))}
