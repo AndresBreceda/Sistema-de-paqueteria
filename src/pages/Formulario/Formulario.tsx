@@ -1,7 +1,12 @@
-import { Hash, House, Send, User } from "lucide-react";
+import { Check, CircleOff, Hash, House, Send, User } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import './Formulario.css';
+
+const ciudades = [
+    "Aguascalientes", "Calvillo", "Jalpa", "Tabasco", "Juchipila",
+    "Villa Hidalgo", "Teocaltiche", "Loreto", "Pinos", "Ojuelos", "San Luis"
+  ];
 
 // Definimos la interface para el pedido
 interface Pedido {
@@ -140,20 +145,32 @@ export default function Formulario() {
                         </div>
                     ))}
                 </div>
-                <button 
-                    type="submit" 
-                    className="ml-20"
-                    onClick={()=>setFormData}
-                >
-                    Cancelar
-                </button>
-                <button 
-                    type="submit" 
-                    className="button"
-                    disabled={mutation.isPending}
-                >
-                    {mutation.isPending ? 'Enviando...' : 'Enviar'}
-                </button>
+                <div className="flex justify-center gap-4 mt-4">
+                    <button 
+                        type="button" 
+                        className="buttonEdit"
+                        onClick={() => setFormData({
+                            quien: "",
+                            guia: "",
+                            camion: "",
+                            paquetes: "",
+                            inicio: "",
+                            destino: "",
+                            destinatario: "",
+                        })}
+                    >
+                        <CircleOff size={16} /> Cancelar
+                    </button>
+                    <button 
+                        type="submit" 
+                        className="button"
+                        disabled={mutation.isPending}
+                    >
+                        <Check size={16} /> {mutation.isPending ? 'Enviando...' : 'Enviar'}
+                    </button>
+                </div>
+
+               
             </form>
         </div>
     );
