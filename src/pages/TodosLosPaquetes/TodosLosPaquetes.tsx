@@ -23,7 +23,7 @@ export default function TodosLosPaquetes() {
             <Header />
 
             <div className="p-4 mt-30">
-                {ciudadesConPaquetes.map((ciudad: string) => {
+                {ciudadesConPaquetes.map((ciudad: any) => {
                     const paquetesFiltrados = data.filter((p: any) => p.ciudad_destino === ciudad);
                     if (paquetesFiltrados.length === 0) return null;
 
