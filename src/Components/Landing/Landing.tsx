@@ -5,6 +5,22 @@ import { UseGetUsers } from "../../Hooks/Hooks";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'; // Asegúrate de que esté importado
 
+//Practica de .map
+// var animals = [
+//   { name: 'Fluffykins', species: 'rabbit' },
+//   { name: 'Oscar', species: 'dog' },
+//   { name: 'Hamilton', species: 'dog' },
+//   { name: 'Harold', species: 'fish' },
+//   { name: 'Ursula', species: 'cat' },
+//   { name: 'Jimmy', species: 'fish' }
+// ];
+
+// let dog = animals.map(
+//   (p) => p.species === "dog"
+// );
+
+// console.log(dog);
+
 export default function LandingPage() {
   const [formData, setFormData] = useState({
     password: "",
