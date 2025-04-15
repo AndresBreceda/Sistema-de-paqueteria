@@ -61,3 +61,28 @@ export const useGetData = () => {
       retry: 3,
     });
 };
+
+const fetchUsers = async (nombre: string) => {
+  try {
+    const response = await fetch(`https://localhost:5001/api/Log/${nombre}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${errorText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Fetch error: ", error);
+    throw error;
+  }
+};
+
+export const UseGetUsers = (nombre: string) => {
+  return useQuery({
+    queryKey: ["user", nombre], // clave de caché única por ID
+    queryFn: () => fetchUsers(nombre), // ✅ función que se ejecuta solo cuando react-query lo pide
+    retry: 3,
+    enabled: !!nombre, // previene fetch si id está vacío
+  });
+};

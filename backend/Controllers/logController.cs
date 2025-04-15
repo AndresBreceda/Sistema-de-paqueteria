@@ -32,16 +32,16 @@ public class LogController : ControllerBase
     }
 
     // GET: api/Usuarios/{id}
-    [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<Log>> GetUsuarios(string id)
+    [HttpGet("{nombre}")]
+    public async Task<ActionResult<Log>> GetUsuarios(string nombre)
     {
         try
         {
-            var usuario = await _usuarios.Find(p => p.id == id).FirstOrDefaultAsync();
+            var usuario = await _usuarios.Find(p => p.nombre == nombre).FirstOrDefaultAsync();
 
             if (usuario == null)
             {
-                return NotFound($"El usuario con ID {id} no fue encontrado");
+                return NotFound($"El usuario con nombre: {nombre} no fue encontrado");
             }
 
             return Ok(usuario);

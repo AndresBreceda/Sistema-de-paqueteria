@@ -19,12 +19,11 @@ public class LogService
         await _usuarios.Find(_ => true).ToListAsync();
 
     // Obtener un pedido específico por ID
-    public async Task<Log?> GetUsuarioAsync(string id)
+    public async Task<Log?> GetUsuarioAsync(string nombre)
     {
-        ObjectId objectId;
-        if (ObjectId.TryParse(id, out objectId))
+        if (nombre.Length > 0)
         {
-            return await _usuarios.Find(p => p.id == id).FirstOrDefaultAsync();
+            return await _usuarios.Find(p => p.nombre == nombre).FirstOrDefaultAsync();
         }
         return null;
     }

@@ -8,6 +8,8 @@ import Home from './Home';
 import General from './pages/General/General';
 import { TodosLosPaquetes } from './pages/TodosLosPaquetes';
 import NotFound from './pages/NotFound/NoEncontrado';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const queryClient = new QueryClient();
 
@@ -25,6 +27,7 @@ function App() {
         </Routes>
       </Router>
       <ReactQueryDevtools initialIsOpen={false} />
+      <ToastContainer position="bottom-left" />
     </QueryClientProvider>
   );
 }
