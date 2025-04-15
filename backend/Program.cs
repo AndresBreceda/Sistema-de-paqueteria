@@ -45,6 +45,8 @@ builder.Services.AddSingleton<IMongoClient>(s =>
     return new MongoClient(settings.ConnectionString);
 });
 
+
+//Lugar par agregar nuevos endpoints
 builder.Services.AddScoped<PedidosService>();
 
 

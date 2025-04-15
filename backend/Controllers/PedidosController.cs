@@ -1,64 +1,114 @@
-using MongoDB.Driver;
-using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
-public class PedidosService
+[ApiController]
+[Route("api/[controller]")]
+public class PedidosController : ControllerBase
 {
     private readonly IMongoCollection<Pedidos> _pedidosCollection;
 
-    public PedidosService(IMongoDatabase database)
+    public PedidosController(IMongoDatabase database)
     {
-        _pedidosCollection = database.GetCollection<Pedidos>("pedidos");
+        _pedidosCollection = database.GetCollection<Pedidos>("Pedidos");
     }
 
-    // Obtener todos los pedidos (nombrado como usuarios en el controlador)
-    public async Task<List<Pedidos>> GetUsuariosAsync() =>
-        await _pedidosCollection.Find(_ => true).ToListAsync();
-
-    // Obtener un pedido específico por ID
-    public async Task<Pedidos?> GetUsuarioAsync(string id)
+    // GET: api/pedidos
+    [HttpGet]
+    public async Task<ActionResult<List<Pedidos>>> GetPedidos()
     {
-        ObjectId objectId;
-        if (ObjectId.TryParse(id, out objectId))
+        try
         {
-            return await _pedidosCollection.Find(p => p.id == id).FirstOrDefaultAsync();
+            var pedidos = await _pedidosCollection.Find(_ => true).ToListAsync();
+            return Ok(pedidos);
         }
-        return null;
-    }
-
-    // Crear un nuevo pedido
-    public async Task<Pedidos> CreateUsuarioAsync(Pedidos pedido)
-    {
-        await _pedidosCollection.InsertOneAsync(pedido);
-        return pedido;
-    }
-
-    // Actualizar un pedido existente
-    public async Task<bool> UpdateUsuarioAsync(string id, Pedidos pedidoActualizado)
-    {
-        ObjectId objectId;
-        if (!ObjectId.TryParse(id, out objectId))
+        catch (Exception ex)
         {
-            return false;
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
         }
-
-        var result = await _pedidosCollection.ReplaceOneAsync(
-            p => p.id == id, 
-            pedidoActualizado);
-
-        return result.IsAcknowledged && result.ModifiedCount > 0;
     }
 
-    // Eliminar un pedido
-    public async Task DeletePaqueteAsync(string id)
+    // GET: api/pedidos/{id}
+    [HttpGet("{id:length(24)}")]
+    public async Task<ActionResult<Pedidos>> GetPedido(string id)
     {
-        ObjectId objectId;
-        if (ObjectId.TryParse(id, out objectId))
+        try
         {
-            await _pedidosCollection.DeleteOneAsync(p => p.id == id);
+            var pedido = await _pedidosCollection.Find(p => p.id == id).FirstOrDefaultAsync();
+
+            if (pedido == null)
+            {
+                return NotFound($"El pedido con ID {id} no fue encontrado");
+            }
+
+            return Ok(pedido);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+    // POST: api/pedidos
+    [HttpPost]
+    public async Task<ActionResult<Pedidos>> CreatePedido(Pedidos pedido)
+    {
+        try
+        {
+            await _pedidosCollection.InsertOneAsync(pedido);
+            return CreatedAtAction(nameof(GetPedido), new { id = pedido.id }, pedido);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+    // PUT: api/pedidos/{id}
+    [HttpPut("{id:length(24)}")]
+    public async Task<IActionResult> UpdatePedido(string id, Pedidos pedidoIn)
+    {
+        try
+        {
+            var pedido = await _pedidosCollection.Find(p => p.id == id).FirstOrDefaultAsync();
+
+            if (pedido == null)
+            {
+                return NotFound($"El pedido con ID {id} no fue encontrado");
+            }
+
+            pedidoIn.id = id;
+            await _pedidosCollection.ReplaceOneAsync(p => p.id == id, pedidoIn);
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+    // DELETE: api/pedidos/{id}
+    [HttpDelete("{id:length(24)}")]
+    public async Task<IActionResult> DeletePedido(string id)
+    {
+        try
+        {
+            var result = await _pedidosCollection.DeleteOneAsync(p => p.id == id);
+
+            if (result.DeletedCount == 0)
+            {
+                return NotFound($"El pedido con ID {id} no fue encontrado");
+            }
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
         }
     }
 }

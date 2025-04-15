@@ -1,56 +1,55 @@
-using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsuariosController : ControllerBase
+public class LogController : ControllerBase
 {
-    private readonly IMongoCollection<Usuarios> _usuariosCollection;
+    private readonly IMongoCollection<Log> _usuarios;
 
-    public UsuariosController(IMongoDatabase database)
+    public LogController(IMongoDatabase database)
     {
-        _usuariosCollection = database.GetCollection<Usuarios>("Usuarios");
+        _usuarios = database.GetCollection<Log>("Usuarios");
     }
 
-    // GET: api/usuarios
+    // GET: api/Usuarios
     [HttpGet]
-    public async Task<ActionResult<List<Usuarios>>> GetUsuarios()
+    public async Task<ActionResult<List<Log>>> GetUsuarios()
     {
-        var usuarios = await _usuariosCollection.Find(_ => true).ToListAsync();
-        return Ok(usuarios);
+        try
+        {
+            var usuarios = await _usuarios.Find(_ => true).ToListAsync();
+            return Ok(usuarios);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
     }
 
-    // GET: api/usuarios/{id}
+    // GET: api/Usuarios/{id}
     [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<Usuarios>> GetUsuario(string id)
+    public async Task<ActionResult<Log>> GetUsuarios(string id)
     {
-        var usuario = await _usuariosCollection.Find(u => u.id == id).FirstOrDefaultAsync();
-        if (usuario == null)
+        try
         {
-            return NotFound();
+            var usuario = await _usuarios.Find(p => p.id == id).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return NotFound($"El usuario con ID {id} no fue encontrado");
+            }
+
+            return Ok(usuario);
         }
-        return Ok(usuario);
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
     }
 
-    // POST: api/usuarios (registro)
-    [HttpPost]
-    public async Task<ActionResult<Usuarios>> CrearUsuario(Usuarios nuevoUsuario)
-    {
-        await _usuariosCollection.InsertOneAsync(nuevoUsuario);
-        return CreatedAtAction(nameof(GetUsuario), new { id = nuevoUsuario.id }, nuevoUsuario);
-    }
-
-    // DELETE: api/usuarios/{id}
-    [HttpDelete("{id:length(24)}")]
-    public async Task<IActionResult> EliminarUsuario(string id)
-    {
-        var resultado = await _usuariosCollection.DeleteOneAsync(u => u.id == id);
-        if (resultado.DeletedCount == 0)
-        {
-            return NotFound();
-        }
-        return NoContent();
-    }
 }
