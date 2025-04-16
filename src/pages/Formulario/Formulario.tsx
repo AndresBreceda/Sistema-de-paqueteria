@@ -1,4 +1,4 @@
-import { Check, CircleOff, Hash, House, Send, User } from "lucide-react";
+import { Check, CircleOff, Hash, House, Pencil, Send, User, Weight } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import './Formulario.css';
@@ -17,6 +17,8 @@ interface Pedido {
   ciudad_inicio: string;
   ciudad_destino: string;
   nombre_destinatario: string;
+  peso: string;
+  articulo: string;
 }
 
 // Función para enviar los datos a la API
@@ -45,6 +47,8 @@ export default function Formulario() {
         inicio: "",
         destino: "", // Corregido el nombre para que coincida con el mapeado de campos
         destinatario: "",
+        peso: "",
+        articulo: ""
     });
     
     const [message, setMessage] = useState({ text: '', isError: false });
@@ -60,7 +64,9 @@ export default function Formulario() {
                 numero_paquetes: data.paquetes,
                 ciudad_inicio: data.inicio,
                 ciudad_destino: data.destino,
-                nombre_destinatario: data.destinatario
+                nombre_destinatario: data.destinatario,
+                peso: data.peso,
+                articulo: data.articulo
             };
             
             return createPedido(pedido);
@@ -76,6 +82,8 @@ export default function Formulario() {
                 inicio: "",
                 destino: "",
                 destinatario: "",
+                peso: "",
+                articulo: ""
             });
             
             // Limpiar el mensaje después de 3 segundos
@@ -124,6 +132,9 @@ export default function Formulario() {
                         { label: "Ciudad de inicio:", name: "inicio", icon: <House size={20} />, placeholder: "Aguascalientes" },
                         { label: "Ciudad de destino:", name: "destino", icon: <House size={20} />, placeholder: "Destino" },
                         { label: "Nombre del destinatario:", name: "destinatario", icon: <User size={20} />, placeholder: "Nombre del destinatario" },
+                        { label: "Peso del paquete", name: "peso", icon: <Weight  size={20}/>,placeholder: "1 kg", type: "text" },
+                        { label: "Nombre del articulo", name: "articulo", icon: <Pencil size={20}/>,placeholder: "Articulo", type: "text" },
+                    
                     ].map(({ label, name, icon, placeholder, type = "text" }) => (
                         <div key={name} className="flex items-center gap-4">
                             <label htmlFor={name} className="text-gray-700 font-medium w-48 text-right">
@@ -157,6 +168,8 @@ export default function Formulario() {
                             inicio: "",
                             destino: "",
                             destinatario: "",
+                            peso: "",
+                            articulo: ""
                         })}
                     >
                         <CircleOff size={16} /> Cancelar

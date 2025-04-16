@@ -3,6 +3,17 @@ import Divider from '@mui/material/Divider';
 import "./styles.css";
 import { Church } from "lucide-react";
 import { useGetData } from "../../Hooks/Hooks";
+import agsIMG from "../../../public/ciudades/aguascalientes.png"
+import calIMG from "../../../public/ciudades/calvillo.png"
+import tabIMG from "../../../public/ciudades/tabasco.png"
+
+
+const imagenesPorCiudad: { [key: string]: string } = {
+    aguascalientes: agsIMG,
+    calvillo: calIMG,
+    tabasco: tabIMG,
+    // Agrega más ciudades e imágenes según sea necesario
+};
 
 export default function TodosLosPaquetes() {
     const { isError, isLoading, data } = useGetData();
@@ -31,7 +42,11 @@ export default function TodosLosPaquetes() {
                         <div key={ciudad} className="mb-15 border-2 border-blue-300 p-6 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ease-in-out">
                             <div className="paquete-header mb-5 flex items-center justify-between">
                                 <h2 className="text-blue-900 text-3xl">{ciudad}</h2>
-                                <Church />
+                                {imagenesPorCiudad[ciudad] ? (
+                                    <img src={imagenesPorCiudad[ciudad]} alt={ciudad} className="w-12 h-12 object-contain" />
+                                ) : (
+                                    <Church />
+                                )}
                             </div>
                             <Divider sx={{ borderWidth: 3, borderColor: "black" }} />
                             <ul className="paquete-list mt-5 space-y-4">

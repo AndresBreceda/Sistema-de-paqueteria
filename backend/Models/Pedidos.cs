@@ -15,4 +15,7 @@ public class Pedidos
     public string numero_guia { get; set; } = null!;
     public string numero_paquetes { get; set; } = null!;
     public string ciudad_destino { get; set; } = null!;
+
+    public string peso {get; set;} = null!;
+    public string articulo {get; set;} = null!;
 }

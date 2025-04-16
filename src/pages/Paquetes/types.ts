@@ -9,6 +9,8 @@ interface Paquete {
     numero_guia: string;
     numero_paquetes: string;
     ciudad_destino: string;
+    peso: string;
+    articulo: string;
 }
 
 export default Paquete;

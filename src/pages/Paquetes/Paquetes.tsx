@@ -42,6 +42,10 @@ export default function Paquetes(){
             <strong className="text-lg text-blue-900">Número de guía:</strong> {item.numero_guia}
             <br />
             <strong className="text-lg text-blue-900">Número de paquetes:</strong> {item.numero_paquetes}
+            <br />
+            <strong className="text-lg text-blue-900">Peso:</strong> {item.peso}
+            <br />
+            <strong className="text-lg text-blue-900">Articulo:</strong> {item.articulo}
             <div className="grid grid-cols-2 grid-rows-1 gap-4 mt-10">
               <button className="button-edit">Editar</button>
               <button className="button-delete" onClick={() => handleDelete(item._id)} disabled={isLoadingDelete}>
