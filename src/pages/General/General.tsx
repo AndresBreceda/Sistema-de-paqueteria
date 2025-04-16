@@ -8,7 +8,7 @@ export default function General() {
         <div>
             <Header />
 
-            <div className="mt-20 mb-20 bg-white p-6 shadow-md rounded-lg">
+            <div className="mt-30 mb-20 bg-white p-6 shadow-md rounded-lg">
                 <Paquetes />
             </div>
 

@@ -11,6 +11,7 @@ interface Paquete {
     ciudad_destino: string;
     peso: string;
     articulo: string;
+    precio: string;
 }
 
 export default Paquete;

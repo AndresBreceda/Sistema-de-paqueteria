@@ -13,18 +13,21 @@ export default function Paquetes(){
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  // Obtener los últimos 10 paquetes
+  const ultimosDiez = [...data].slice(-10).reverse(); // `reverse` para que el más reciente esté primero
+
   return (
     <div className="p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold mb-6 text-blue-900 text-center">Próximos Paquetes</h2>
+      <h2 className="text-2xl font-semibold mb-6 text-blue-900 text-center">Últimos 10 Paquetes</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.length === 0 &&
+        {ultimosDiez.length === 0 &&
           <div className="flex justify-center items-cente">
             <div className="text-lg text-blue-900 rounded-lg">
-            ...No hay paquetes...
+              ...No hay paquetes...
             </div>
           </div> 
         }
-        {data.map((item: Paquete) => (
+        {ultimosDiez.map((item: Paquete) => (
           <div
             key={item._id}
             className="border-2 border-blue-300 p-6 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ease-in-out"
@@ -45,7 +48,7 @@ export default function Paquetes(){
             <br />
             <strong className="text-lg text-blue-900">Peso:</strong> {item.peso}
             <br />
-            <strong className="text-lg text-blue-900">Articulo:</strong> {item.articulo}
+            <strong className="text-lg text-blue-900">Artículo:</strong> {item.articulo}
             <div className="grid grid-cols-2 grid-rows-1 gap-4 mt-10">
               <button className="button-edit">Editar</button>
               <button className="button-delete" onClick={() => handleDelete(item._id)} disabled={isLoadingDelete}>
@@ -58,5 +61,4 @@ export default function Paquetes(){
       </div>
     </div>
   );
-  
 }

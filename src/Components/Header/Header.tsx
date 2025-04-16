@@ -1,4 +1,4 @@
-import { LogOut, NotebookPen, PackageCheck } from "lucide-react";
+import { LogOut, NotebookPen, NotebookText, PackageCheck } from "lucide-react";
 import './styles.css';
 
 export default function Header() {
@@ -14,6 +14,11 @@ export default function Header() {
         <a href="/Formulario" className="text-white flex items-center gap-2 referencia">
           <PackageCheck size={20} />
           Escribir pedidos
+        </a>
+        |
+        <a href="/Registros" className="text-white flex items-center gap-2 referencia">
+          <NotebookText size={20} />
+          Ver registros
         </a>
       </div>
       <a href="/" className="ml-6 flex gap-2 referencia">

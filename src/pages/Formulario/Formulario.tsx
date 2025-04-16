@@ -1,4 +1,4 @@
-import { Check, CircleOff, Hash, House, Pencil, Send, User, Weight } from "lucide-react";
+import { Check, CircleOff, DollarSign, Hash, House, Pencil, Send, User, Weight } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import './Formulario.css';
@@ -19,6 +19,8 @@ interface Pedido {
   nombre_destinatario: string;
   peso: string;
   articulo: string;
+  precio: string;
+
 }
 
 // Función para enviar los datos a la API
@@ -48,7 +50,8 @@ export default function Formulario() {
         destino: "", // Corregido el nombre para que coincida con el mapeado de campos
         destinatario: "",
         peso: "",
-        articulo: ""
+        articulo: "",
+        precio: ""
     });
     
     const [message, setMessage] = useState({ text: '', isError: false });
@@ -65,8 +68,9 @@ export default function Formulario() {
                 ciudad_inicio: data.inicio,
                 ciudad_destino: data.destino,
                 nombre_destinatario: data.destinatario,
+                articulo: data.articulo,
                 peso: data.peso,
-                articulo: data.articulo
+                precio: data.precio
             };
             
             return createPedido(pedido);
@@ -83,7 +87,8 @@ export default function Formulario() {
                 destino: "",
                 destinatario: "",
                 peso: "",
-                articulo: ""
+                articulo: "",
+                precio: ""
             });
             
             // Limpiar el mensaje después de 3 segundos
@@ -134,6 +139,7 @@ export default function Formulario() {
                         { label: "Nombre del destinatario:", name: "destinatario", icon: <User size={20} />, placeholder: "Nombre del destinatario" },
                         { label: "Peso del paquete", name: "peso", icon: <Weight  size={20}/>,placeholder: "1 kg", type: "text" },
                         { label: "Nombre del articulo", name: "articulo", icon: <Pencil size={20}/>,placeholder: "Articulo", type: "text" },
+                        { label: "Precio", name: "Pecio", icon: <DollarSign size={20}/>,placeholder: "$", type: "text" },
                     
                     ].map(({ label, name, icon, placeholder, type = "text" }) => (
                         <div key={name} className="flex items-center gap-4">
@@ -169,7 +175,8 @@ export default function Formulario() {
                             destino: "",
                             destinatario: "",
                             peso: "",
-                            articulo: ""
+                            articulo: "",
+                            precio: ""
                         })}
                     >
                         <CircleOff size={16} /> Cancelar

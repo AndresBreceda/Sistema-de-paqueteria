@@ -10,6 +10,7 @@ import { TodosLosPaquetes } from './pages/TodosLosPaquetes';
 import NotFound from './pages/NotFound/NoEncontrado';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Registros } from './pages/Registros';
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Formulario" element={<General />} />
           <Route path="/Pedidos" element={<TodosLosPaquetes />} />
+          <Route path="/Registros" element={<Registros />} />
           {/* Ruta para páginas no encontradas */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -18,4 +18,5 @@ public class Pedidos
 
     public string peso {get; set;} = null!;
     public string articulo {get; set;} = null!;
+    public string precio {get; set;} = null!;
 }

@@ -1,3 +1,31 @@
-.divider{
-    
-}
+.button-delete {
+    background-color: #e74c3c; /* Rojo */
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  .button-delete:hover {
+    background-color: #c0392b; /* Rojo más oscuro al pasar el mouse */
+  }
+  
+  .button-approve {
+    background-color: #2ecc71; /* Verde */
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-approve:hover {
+    background-color: #27ae60; /* Verde más oscuro al pasar el mouse */
+  }
+  
