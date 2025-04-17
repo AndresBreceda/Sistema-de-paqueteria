@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // Función para eliminar un pedido
-const deleteData = async (pedidoId: any) => {
+const deleteData = async (pedidoId: KeyUsage) => {
   try {
     const response = await fetch(`https://localhost:5001/api/Pedidos/${pedidoId}`, {
       method: "DELETE",
@@ -12,7 +12,8 @@ const deleteData = async (pedidoId: any) => {
       throw new Error(`HTTP Error: ${response.status} - ${errorText}`);
     }
 
-    return response.json(); // Si el backend devuelve algo
+    const text = await response.text();
+    return text ? JSON.parse(text) : null;
   } catch (error) {
     console.error("Fetch error: ", error);
     throw error;
@@ -26,7 +27,8 @@ export const useDeletePedido = () => {
   return useMutation({
     mutationFn: deleteData,
     onSuccess: () => {
-      queryClient.invalidateQueries(["pedidos"]); // Refrescar la lista después de eliminar
+      queryClient.invalidateQueries({ queryKey: ["pedidos"] });
+
     },
   });
 };
@@ -53,7 +55,7 @@ const fetchData = async () => {
 // Hook personalizado con React Query
 export const useGetData = () => {
     return useQuery({
-      queryKey: ["data"], // Clave de caché
+      queryKey: ["pedidos"], // Clave de caché
       queryFn: fetchData, // Función de fetch
       refetchInterval: 3 * 60 * 1000, // Refetch cada 3 minutos (en milisegundos)
       refetchIntervalInBackground: true, // Refetch incluso cuando la ventana no está activa

@@ -1,7 +1,7 @@
 import { Key } from "react";
 
 interface Paquete {
-    _id: Key; // o 'Key' si prefieres usar un tipo especial de clave
+    id: Key; // o 'Key' si prefieres usar un tipo especial de clave
     nombre_remitente: string;
     numero_camion: string;
     ciudad_inicio: string;
