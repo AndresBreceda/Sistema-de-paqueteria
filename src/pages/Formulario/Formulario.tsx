@@ -175,7 +175,7 @@ export default function Formulario() {
                   )}
                 </div>
                 {["inicio", "destino"].includes(name) && mismoLugarError && (
-                  <p className="text-red-600 text-sm mt-1">La ciudad de origen y destino no pueden ser iguales.</p>
+                  <p className="text-red-600 text-sm mt-1">La ciudad no puede ser la misma.</p>
                 )}
               </div>
             </div>
