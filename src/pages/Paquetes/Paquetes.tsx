@@ -57,7 +57,7 @@ export default function Paquetes() {
         {ultimosDiez.length === 0 && (
           <div className="flex justify-center items-center col-span-full">
             <div className="text-lg text-blue-900 rounded-lg">
-              ...No hay paquetes...
+              No hay paquetes
             </div>
           </div>
         )}

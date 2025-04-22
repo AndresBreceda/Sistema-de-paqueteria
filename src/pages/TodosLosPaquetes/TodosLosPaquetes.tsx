@@ -17,6 +17,21 @@ export default function TodosLosPaquetes() {
 
   const ciudadesConPaquetes = [...new Set(data.map((p: any) => p.ciudad_destino))];
 
+  // Si no hay paquetes, mostrar un mensaje
+  if (ciudadesConPaquetes.length === 0) {
+    return (
+      <div className="flex">
+        <Header />
+            
+          <div className="mb-15 border-2 border-blue-300 p-6 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ease-in-">
+            <h2 className="text-left text-blue-900 text-2xl mb-5">No hay paquetes</h2>
+            <p>Crea un paquete</p><a href="/Formulario" className="text-blue-600 underline mt-2 inline-block cursor-pointer">aqui</a>
+          </div>
+      </div>
+
+      );
+  }
+
   return (
     <div>
       <Header />
@@ -24,15 +39,7 @@ export default function TodosLosPaquetes() {
       <div className="mt-30 ">
         {ciudadesConPaquetes.map((ciudad: any) => {
           const paquetesFiltrados = data.filter((p: any) => p.ciudad_destino === ciudad);
-          
-          // Si no hay paquetes, mostrar un mensaje
-          if (paquetesFiltrados.length === 0) {
-            return (
-              <div key={ciudad} className="mb-15 border-2 border-blue-300 p-6 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-300 ease-in-">
-                <p className="text-center text-blue-900">No hay paquetes para la ciudad de {ciudad}</p>
-              </div>
-            );
-          }
+        
 
           return (
             <div
