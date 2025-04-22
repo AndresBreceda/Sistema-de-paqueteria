@@ -1,20 +1,42 @@
 import CiudadComponente from "../../Components/Ciudad_registro/CiudadComponente";
-import { Header } from "../../Components/Header";
+import {Header} from "../../Components/Header"; // Quita las llaves, es default
+
+const ciudades = [
+  "Aguascalientes", "Calvillo", "Jalpa", "Tabasco", "Juchipila",
+  "Villa Hidalgo", "Teocaltiche", "Loreto", "Pinos", "Ojuelos", "San Luis"
+];
 
 export default function Registros() {
-    return (
-        <div className="min-h-screen flex flex-col">
-            <Header />
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <Header />
 
-            {/* Esto crea un espacio debajo del header fijo */}
-            <div className="mt-[100px] flex-1 flex justify-center items-start p-6">
-                <div className="w-full max-w-4xl bg-white rounded-2xl shadow p-6">
-                    <h2 className="text-sm text-black font-medium mb-4">
-                        Descarga los paquetes de tu sucursal al final del mes
-                    </h2>
-                    <CiudadComponente ciudad={"Aguascalientes"} mes={"Abril"} />
-                </div>
-            </div>
+      {/* Espacio debajo del header */}
+      <div className="mt-[100px] flex-1 flex flex-col items-center p-6">
+        <div className="w-full max-w-4xl bg-white rounded-2xl shadow p-6">
+          <h2 className="text-sm text-black font-medium mb-4">
+            Descarga los paquetes de tu sucursal al final del mes
+          </h2>
+
+          {/* Navegación de ciudades */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {ciudades.map((ciudad) => (
+              <a
+                key={ciudad}
+                href={`#${ciudad}`}
+                className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full shadow hover:bg-blue-200 transition"
+              >
+                {ciudad}
+              </a>
+            ))}
+          </div>
+
+          {/* Secciones por ciudad */}
+          {ciudades.map((ciudad) => (
+            <CiudadComponente key={ciudad} ciudad={ciudad} mes={"Abril"} />
+          ))}
         </div>
-    );
+      </div>
+    </div>
+  );
 }

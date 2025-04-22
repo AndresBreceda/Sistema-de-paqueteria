@@ -18,7 +18,7 @@ export default function Header() {
         |
         <a href="/Registros" className="text-white flex items-center gap-2 referencia">
           <NotebookText size={20} />
-          Ver registros
+          Descargar registros
         </a>
       </div>
       <a href="/" className="ml-6 flex gap-2 referencia">

@@ -15,18 +15,22 @@ const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
   };
 
   return (
-    <div className="w-full p-6 rounded-lg text-left border border-blue-900 bg-white shadow">
-      <h2 className="text-blue-900 text-2xl font-semibold">{ciudad}</h2>
-      <span id={ciudad}></span>
-      <Divider sx={{ borderWidth: 3, borderColor: "blue", marginBottom: "10px" }} />
-      <p className="text-gray-700">Paquetes de {ciudad} del mes de {mes}</p>
-      <button
-        onClick={handleDescargarPDF}
-        className="text-blue-600 underline mt-2 inline-block cursor-pointer"
-      >
-        Descargar
-      </button>
+    <>
+    <div className="w-full p-6 rounded-lg text-left border border-blue-900 bg-white shadow mt-10">
+
+    <h2 id={ciudad} className="text-blue-900 text-2xl font-semibold scroll-mt-[200px]">{ciudad}</h2>
+
+    <Divider sx={{ borderWidth: 3, borderColor: "blue", marginBottom: "10px" }} />
+    <p className="text-gray-700">Paquetes de {ciudad} del mes de {mes}</p>
+    <button
+      onClick={handleDescargarPDF}
+      className="text-blue-600 underline mt-2 inline-block cursor-pointer"
+    >
+      Descargar
+    </button>
     </div>
+    </>
+
   );
 };
 
