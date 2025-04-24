@@ -84,6 +84,8 @@ export default function Paquetes() {
             <strong className="text-lg text-blue-900">Peso:</strong> {item.peso}
             <br />
             <strong className="text-lg text-blue-900">Artículo:</strong> {item.articulo}
+            <br />
+            <strong className="text-lg text-blue-900">Hora de salida:</strong> {item.hora_salida}
             <div className="grid grid-cols-2 gap-4 mt-10">
               <button className="button-edit">Editar</button>
               <button

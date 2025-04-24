@@ -1,6 +1,12 @@
 import CiudadComponente from "../../Components/Ciudad_registro/CiudadComponente";
 import {Header} from "../../Components/Header"; // Quita las llaves, es default
 
+//Obtener fecha actual y solo agrrar el mes
+const fecha = new Date();
+const nombreMes = fecha.toLocaleString("es-MX", { month: "long" }); // Ej: "abril"
+const anio = fecha.getFullYear(); // 2025
+const mesConAnio = `${nombreMes} ${anio}`; // "abril 2025"
+
 const ciudades = [
   "Aguascalientes", "Calvillo", "Jalpa", "Tabasco", "Juchipila",
   "Villa Hidalgo", "Teocaltiche", "Loreto", "Pinos", "Ojuelos", "San Luis"
@@ -33,7 +39,7 @@ export default function Registros() {
 
           {/* Secciones por ciudad */}
           {ciudades.map((ciudad) => (
-            <CiudadComponente key={ciudad} ciudad={ciudad} mes={"Abril"} />
+            <CiudadComponente key={ciudad} ciudad={ciudad} mes={mesConAnio} />
           ))}
         </div>
       </div>

@@ -40,9 +40,7 @@ public class PedidosController : ControllerBase
             var pedido = await _pedidosCollection.Find(p => p.id == id).FirstOrDefaultAsync();
 
             if (pedido == null)
-            {
                 return NotFound($"El pedido con ID {id} no fue encontrado");
-            }
 
             return Ok(pedido);
         }
@@ -76,13 +74,10 @@ public class PedidosController : ControllerBase
             var pedido = await _pedidosCollection.Find(p => p.id == id).FirstOrDefaultAsync();
 
             if (pedido == null)
-            {
                 return NotFound($"El pedido con ID {id} no fue encontrado");
-            }
 
             pedidoIn.id = id;
             await _pedidosCollection.ReplaceOneAsync(p => p.id == id, pedidoIn);
-
             return NoContent();
         }
         catch (Exception ex)
@@ -100,11 +95,56 @@ public class PedidosController : ControllerBase
             var result = await _pedidosCollection.DeleteOneAsync(p => p.id == id);
 
             if (result.DeletedCount == 0)
-            {
                 return NotFound($"El pedido con ID {id} no fue encontrado");
-            }
 
             return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+    // PATCH: api/pedidos/{id}/confirmar
+    [HttpPatch("{id:length(24)}/confirmar")]
+    public async Task<IActionResult> ConfirmarEntrega(string id)
+    {
+        try
+        {
+            var filtro = Builders<Pedidos>.Filter.Eq(p => p.id, id);
+            var actualizacion = Builders<Pedidos>.Update
+                .Set(p => p.entregado, true)
+                .Set(p => p.fecha_entrega, DateTime.UtcNow);
+
+            var resultado = await _pedidosCollection.UpdateOneAsync(filtro, actualizacion);
+
+            if (resultado.MatchedCount == 0)
+                return NotFound($"El pedido con ID {id} no fue encontrado");
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+    // GET: api/pedidos/filtrar?sucursal=Aguascalientes&entregado=true
+    [HttpGet("filtrar")]
+    public async Task<IActionResult> GetPedidosFiltrados([FromQuery] string? sucursal, [FromQuery] bool? entregado)
+    {
+        try
+        {
+            var filtro = Builders<Pedidos>.Filter.Empty;
+
+            if (!string.IsNullOrEmpty(sucursal))
+                filtro &= Builders<Pedidos>.Filter.Eq(p => p.ciudad_destino, sucursal);
+
+            if (entregado.HasValue)
+                filtro &= Builders<Pedidos>.Filter.Eq(p => p.entregado, entregado.Value);
+
+            var pedidos = await _pedidosCollection.Find(filtro).ToListAsync();
+            return Ok(pedidos);
         }
         catch (Exception ex)
         {

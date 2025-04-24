@@ -12,6 +12,7 @@ interface Paquete {
     peso: string;
     articulo: string;
     precio: string;
+    hora_salida: string;
 }
 
 export default Paquete;

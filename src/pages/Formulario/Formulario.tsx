@@ -19,6 +19,27 @@ interface Pedido {
   peso: string;
   articulo: string;
   precio: string;
+  hora_salida: string;
+
+}
+
+function obtenerHoraYFechaSalida() {
+  const ahora = new Date();
+
+  // Formatear la fecha como "YYYY-MM-DD"
+  const año = ahora.getFullYear();
+  const mes = String(ahora.getMonth() + 1).padStart(2, '0'); // Los meses son indexados desde 0
+  const dia = String(ahora.getDate()).padStart(2, '0');
+  const fecha = `${año}-${mes}-${dia}`;
+
+  // Formatear la hora como "HH:MM:SS"
+  const horas = String(ahora.getHours()).padStart(2, '0');
+  const minutos = String(ahora.getMinutes()).padStart(2, '0');
+  const segundos = String(ahora.getSeconds()).padStart(2, '0');
+  const hora = `${horas}:${minutos}:${segundos}`;
+
+  // Combinar fecha y hora
+  return `Dia:${fecha} Hora:${hora}`;
 }
 
 const createPedido = async (pedido: Pedido): Promise<any> => {
@@ -66,7 +87,8 @@ export default function Formulario() {
         nombre_destinatario: data.destinatario,
         articulo: data.articulo,
         peso: data.peso,
-        precio: data.precio
+        precio: data.precio,
+        hora_salida: obtenerHoraYFechaSalida(),
       };
 
       return createPedido(pedido);

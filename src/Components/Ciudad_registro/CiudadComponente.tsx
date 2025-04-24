@@ -6,12 +6,45 @@ interface ComponenteCiudadProps {
   mes: string;
 }
 
+const agregarImagen = async (doc: jsPDF) => {
+  const imgUrl = "/logo.png"; // desde la carpeta public
+  const img = await fetch(imgUrl);
+  const blob = await img.blob();
+  const reader = new FileReader();
+
+  return new Promise<void>((resolve) => {
+    reader.onloadend = () => {
+      const base64data = reader.result as string;
+      doc.addImage(base64data, "PNG", 10, 10, 50, 50); // "PNG" o "JPEG" según la imagen
+      resolve();
+    };
+    reader.readAsDataURL(blob);
+  });
+};
+
+
+
 const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
   
-  const handleDescargarPDF = () => {
-    const doc = new jsPDF();
-    // Si quieres agregar algo, puedes usar: doc.text("Texto", x, y);
-    doc.save(`Paquetes_${ciudad}_${mes}.pdf`);
+  const handleDescargarPDF = async () => {
+      const doc = new jsPDF();
+      let date = new Date();
+      let fechaFormateada = date.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    
+      // Título
+      doc.setFontSize(16);
+      doc.text(`Descarga del día: ${fechaFormateada}`, 60, 15);
+      doc.text(`Paquetes de ${ciudad} - ${mes}`, 90, 35);
+      
+
+      // Imagen (espera la carga)
+      await agregarImagen(doc);
+      // Si quieres agregar algo, puedes usar: doc.text("Texto", x, y);
+      doc.save(`Paquetes_${ciudad}_${mes}.pdf`);
   };
 
   return (

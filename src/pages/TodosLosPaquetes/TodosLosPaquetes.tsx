@@ -74,7 +74,7 @@ export default function TodosLosPaquetes() {
 
               <div className="w-full">
                 {paquetesFiltrados.map((p: any) => (
-                  <div key={p.id} className="grid grid-cols-3 gap-4 mb-5">
+                  <div key={p.id} className="grid grid-cols-3 gap-4 mb-5 text-left">
                     <div className="col-span-2">
                       <p><strong>Nombre del remitente:</strong> {p.nombre_remitente}</p>
                       <p><strong>Numero de guia:</strong> {p.numero_guia}</p>
@@ -83,15 +83,13 @@ export default function TodosLosPaquetes() {
                       <p><strong>Ciudad de inicio:</strong> {p.ciudad_inicio}</p>
                       <p><strong>Ciudad de destino:</strong> {p.ciudad_destino}</p>
                       <p><strong>Nombre del destinatario:</strong> {p.nombre_destinatario}</p>
+                      <p><strong>Hora de salida:</strong> {p.hora_salida}</p>
                     </div>
 
                     <div className="col-start-3 mt-15">
                       <div className="ml-5 grid grid-cols-1 gap-4">
-                        <button className="button-delete" onClick={() => console.log("Eliminar", p.id)}>
-                          Cancelar Paquete
-                        </button>
-                        <button className="button-approve">
-                          Aprovar
+                        <button onClick={()=>console.log("hola")} className="button-approve">
+                          Aprovar Paquete
                         </button>
                       </div>
                     </div>
