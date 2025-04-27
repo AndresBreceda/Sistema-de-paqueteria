@@ -7,18 +7,18 @@ using MongoDB.Bson;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PedidosController : ControllerBase
+public class ConfirmadosController : ControllerBase
 {
-    private readonly IMongoCollection<Pedidos> _pedidosCollection;
+    private readonly IMongoCollection<Confirmados> _pedidosCollection;
 
-    public PedidosController(IMongoDatabase database)
+    public ConfirmadosController(IMongoDatabase database)
     {
-        _pedidosCollection = database.GetCollection<Pedidos>("Pedidos");
+        _pedidosCollection = database.GetCollection<Confirmados>("PedidosConfirmados");
     }
 
     // GET: api/pedidos
     [HttpGet]
-    public async Task<ActionResult<List<Pedidos>>> GetPedidos()
+    public async Task<ActionResult<List<Confirmados>>> GetPedidos()
     {
         try
         {
@@ -33,7 +33,7 @@ public class PedidosController : ControllerBase
 
     // GET: api/pedidos/{id}
     [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<Pedidos>> GetPedido(string id)
+    public async Task<ActionResult<Confirmados>> GetPedido(string id)
     {
         try
         {
@@ -52,12 +52,12 @@ public class PedidosController : ControllerBase
 
     // POST: api/pedidos
     [HttpPost]
-    public async Task<ActionResult<Pedidos>> CreatePedido(Pedidos pedido)
+    public async Task<ActionResult<Confirmados>> CreatePedido(Confirmados confirmo)
     {
         try
         {
-            await _pedidosCollection.InsertOneAsync(pedido);
-            return CreatedAtAction(nameof(GetPedido), new { id = pedido.id }, pedido);
+            await _pedidosCollection.InsertOneAsync(confirmo);
+            return CreatedAtAction(nameof(GetPedido), new { id = confirmo.id }, confirmo);
         }
         catch (Exception ex)
         {
@@ -67,7 +67,7 @@ public class PedidosController : ControllerBase
 
     // PUT: api/pedidos/{id}
     [HttpPut("{id:length(24)}")]
-    public async Task<IActionResult> UpdatePedido(string id, Pedidos pedidoIn)
+    public async Task<IActionResult> UpdatePedido(string id, Confirmados pedidoIn)
     {
         try
         {

@@ -1,17 +1,22 @@
-import { Check, CircleOff, DollarSign, Hash, House, Pencil, Send, User, Weight } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { Check, CircleOff, DollarSign, Hash, House, Pencil, Send, Timer, User, Weight } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import './Formulario.css';
+import { useLocation } from "react-router-dom";
+
+//agregar hora de salida del camion a la hora del llenado
+//agregar logica para mandar hora de salida y camion
 
 const ciudades = [
   "Aguascalientes", "Calvillo", "Jalpa", "Tabasco", "Juchipila",
   "Villa Hidalgo", "Teocaltiche", "Loreto", "Pinos", "Ojuelos", "San Luis"
 ];
 
-interface Pedido {
-  nombre_remitente: string;
+export interface Pedido {
+  pedido?: string;
+  nombre_remitente?: string;
   numero_guia: string;
-  numero_camion: string;
+  numero_camion?: string;
   numero_paquetes: string;
   ciudad_inicio: string;
   ciudad_destino: string;
@@ -19,7 +24,8 @@ interface Pedido {
   peso: string;
   articulo: string;
   precio: string;
-  hora_salida: string;
+  hora_salida?: string;
+  hora_captura:string;
 
 }
 
@@ -52,7 +58,7 @@ const createPedido = async (pedido: Pedido): Promise<any> => {
   });
 
   if (!response.ok) {
-    throw new Error('Error al crear el pedido');
+    throw new Error('Error al crear el pedido' + Error);
   }
 
   return response.json();
@@ -60,7 +66,7 @@ const createPedido = async (pedido: Pedido): Promise<any> => {
 
 export default function Formulario() {
   const [formData, setFormData] = useState({
-    quien: "",
+    // quien: "",
     guia: "",
     camion: "",
     paquetes: "",
@@ -69,16 +75,55 @@ export default function Formulario() {
     destinatario: "",
     peso: "",
     articulo: "",
-    precio: ""
+    precio: "",
+    hora_salida: ""
+
   });
+
+const location = useLocation();
+const paqueteRecibido = location.state?.paquete;
+
+
+useEffect(() => {
+  if (paqueteRecibido) {
+    setFormData((prev) => ({
+      ...prev,
+      guia: paqueteRecibido.numero_guia || "",
+      camion: paqueteRecibido.numero_camion || "",         // ← Nuevo
+      paquetes: paqueteRecibido.numero_paquetes || "",
+      inicio: paqueteRecibido.ciudad_inicio || "",          // ← Nuevo
+      destino: paqueteRecibido.ciudad_destino || "",
+      destinatario: paqueteRecibido.nombre_destinatario || "", // ← Nuevo
+      peso: paqueteRecibido.peso || "",
+      articulo: paqueteRecibido.articulo || "",
+      precio: paqueteRecibido.precio || "",                // ← Nuevo
+      hora_salida: paqueteRecibido.hora_salida || "",       // ← Nuevo
+    }));
+  }
+}, [paqueteRecibido]);
+
+useEffect(() => {
+  if (location.hash) {
+    const element = document.querySelector(location.hash);
+    if (element) {
+      const yOffset = -100; // Mover 100px más arriba
+      const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+}, [location]);
+
 
   const [message, setMessage] = useState({ text: '', isError: false });
   const [mismoLugarError, setMismoLugarError] = useState(false);
 
+  const nombre_cuenta_entrante = localStorage.getItem("nombre_usuario") || '';
+
   const mutation = useMutation({
     mutationFn: (data: typeof formData) => {
       const pedido: Pedido = {
-        nombre_remitente: data.quien,
+        nombre_remitente: nombre_cuenta_entrante,
         numero_guia: data.guia,
         numero_camion: data.camion,
         numero_paquetes: data.paquetes,
@@ -88,7 +133,8 @@ export default function Formulario() {
         articulo: data.articulo,
         peso: data.peso,
         precio: data.precio,
-        hora_salida: obtenerHoraYFechaSalida(),
+        hora_captura: obtenerHoraYFechaSalida(),
+        hora_salida: data.hora_salida
       };
 
       return createPedido(pedido);
@@ -96,7 +142,6 @@ export default function Formulario() {
     onSuccess: () => {
       setMessage({ text: '¡Pedido creado exitosamente!', isError: false });
       setFormData({
-        quien: "",
         guia: "",
         camion: "",
         paquetes: "",
@@ -105,7 +150,8 @@ export default function Formulario() {
         destinatario: "",
         peso: "",
         articulo: "",
-        precio: ""
+        precio: "",
+        hora_salida: ""
       });
       setTimeout(() => setMessage({ text: '', isError: false }), 3000);
     },
@@ -138,7 +184,7 @@ export default function Formulario() {
 
   return (
     <div className="p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold mb-4 text-blue-900">Información del paquete</h2>
+      <h2 id="formulario" className="text-lg font-semibold mb-4 text-blue-900">Información del paquete</h2>
 
       {message.text && (
         <div className={`mb-4 p-3 rounded ${message.isError ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`}>
@@ -149,7 +195,7 @@ export default function Formulario() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           {[
-            { label: "Quien manda:", name: "quien", icon: <User size={20} />, placeholder: "Nombre" },
+            // { label: "Quien manda:", name: "quien", icon: <User size={20} />, placeholder: "Nombre" },
             { label: "Numero de guia:", name: "guia", icon: <Hash size={20} />, placeholder: "no1234" },
             { label: "Numero de camion:", name: "camion", icon: <Hash size={20} />, placeholder: "no1234" },
             { label: "Numero de paquetes:", name: "paquetes", icon: <Send size={20} />, placeholder: "1", type: "number" },
@@ -159,6 +205,7 @@ export default function Formulario() {
             { label: "Peso del paquete", name: "peso", icon: <Weight size={20} />, placeholder: "1 kg", type: "text" },
             { label: "Nombre del articulo", name: "articulo", icon: <Pencil size={20} />, placeholder: "Articulo", type: "text" },
             { label: "Precio", name: "precio", icon: <DollarSign size={20} />, placeholder: "$", type: "text" },
+            { label: "Hora de salida del paquete", name: "hora_salida", icon: <Timer size={20} />, placeholder: "tiempo en que el paquete fue subido al camion", type: "text" },
           ].map(({ label, name, icon, placeholder, type = "text" }) => (
             <div key={name} className="flex items-center gap-4">
               <label htmlFor={name} className="text-gray-700 font-medium w-48 text-right">
@@ -168,33 +215,34 @@ export default function Formulario() {
                 <div className="w-full relative flex items-center">
                   <span className="absolute left-3 text-gray-500">{icon}</span>
                   {["inicio", "destino"].includes(name) ? (
-                    <select
-                      id={name}
-                      name={name}
-                      value={formData[name as keyof typeof formData]}
-                      onChange={handleChange}
-                      required
-                      className={`w-full pl-10 pr-4 py-2 border rounded-md bg-white text-gray-900
-                        ${mismoLugarError ? 'border-red-500 ring-red-300 focus:ring-red-300' : 'border-gray-400 focus:ring-blue-600'}
-                      `}
-                    >
-                      <option value="">Selecciona una ciudad</option>
-                      {ciudades.map((ciudad) => (
-                        <option key={ciudad} value={ciudad}>{ciudad}</option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input
-                      type={type}
-                      id={name}
-                      name={name}
-                      placeholder={placeholder}
-                      value={formData[name as keyof typeof formData]}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white text-gray-900"
-                    />
-                  )}
+                  <select
+                    id={name}
+                    name={name}
+                    value={formData[name as keyof typeof formData]}
+                    onChange={handleChange}
+                    required
+                    className={`w-full pl-10 pr-4 py-2 border rounded-md bg-white text-gray-900
+                      ${mismoLugarError ? 'border-red-500 ring-red-300 focus:ring-red-300' : 'border-gray-400 focus:ring-blue-600'}
+                    `}
+                  >
+                    <option value="">Selecciona una ciudad</option>
+                    {ciudades.map((ciudad) => (
+                      <option key={ciudad} value={ciudad}>{ciudad}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type={type}
+                    id={name}
+                    name={name}
+                    placeholder={placeholder}
+                    value={formData[name as keyof typeof formData]}
+                    onChange={handleChange}
+                    required={!(name === "hora_salida" || name === "camion")}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white text-gray-900"
+                  />
+                )}
+
                 </div>
                 {["inicio", "destino"].includes(name) && mismoLugarError && (
                   <p className="text-red-600 text-sm mt-1">La ciudad no puede ser la misma.</p>
@@ -209,7 +257,6 @@ export default function Formulario() {
             type="button"
             className="buttonEdit"
             onClick={() => setFormData({
-              quien: "",
               guia: "",
               camion: "",
               paquetes: "",
@@ -218,7 +265,8 @@ export default function Formulario() {
               destinatario: "",
               peso: "",
               articulo: "",
-              precio: ""
+              precio: "",
+              hora_salida: ""
             })}
           >
             <CircleOff size={16} /> Cancelar

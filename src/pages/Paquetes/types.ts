@@ -3,7 +3,7 @@ import { Key } from "react";
 interface Paquete {
     id: Key; // o 'Key' si prefieres usar un tipo especial de clave
     nombre_remitente: string;
-    numero_camion: string;
+    numero_camion?: string;
     ciudad_inicio: string;
     nombre_destinatario: string;
     numero_guia: string;
@@ -13,6 +13,7 @@ interface Paquete {
     articulo: string;
     precio: string;
     hora_salida: string;
+    hora_captura?: string;
 }
 
 export default Paquete;

@@ -28,4 +28,15 @@
   .button-approve:hover {
     background-color: #27ae60; /* Verde más oscuro al pasar el mouse */
   }
+
+.button-almost-approve{
+  background-color: oklch(0.828 0.189 84.429);
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
   

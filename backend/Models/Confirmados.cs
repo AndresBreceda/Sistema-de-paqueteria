@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-public class Pedidos
+public class Confirmados
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

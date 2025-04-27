@@ -3,9 +3,31 @@ import Divider from '@mui/material/Divider';
 import "./styles.css";
 import { Church } from "lucide-react";
 import { useGetData } from "../../Hooks/Hooks";
+import { useNavigate } from "react-router-dom";
+
+function pedido_lleno(obj: any) {
+  const camposRequeridos = [
+    'numero_camion',
+    'hora_salida',
+    // otros campos que sean obligatorios
+  ];
+  
+  return camposRequeridos.every(campo => 
+    obj[campo] !== null && 
+    obj[campo] !== undefined && 
+    obj[campo] !== ''
+  );
+}
 
 export default function TodosLosPaquetes() {
   const { isError, isLoading, data } = useGetData();
+
+  const navigate = useNavigate();
+
+  function CompletarPaquete(p: any){
+    navigate("/Formulario#formulario", { state: { paquete: p } });
+  
+  }
 
   if (isLoading) {
     return <p className="text-center mt-10">Cargando datos...</p>;
@@ -72,30 +94,35 @@ export default function TodosLosPaquetes() {
 
               <Divider sx={{ borderWidth: 3, borderColor: "blue", marginBottom: "10px" }} />
 
-              <div className="w-full">
-                {paquetesFiltrados.map((p: any) => (
-                  <div key={p.id} className="grid grid-cols-3 gap-4 mb-5 text-left">
-                    <div className="col-span-2">
-                      <p><strong>Nombre del remitente:</strong> {p.nombre_remitente}</p>
-                      <p><strong>Numero de guia:</strong> {p.numero_guia}</p>
-                      <p><strong>Numero de camión:</strong> {p.numero_camion}</p>
-                      <p><strong>Numero de paquetes:</strong> {p.numero_paquetes}</p>
-                      <p><strong>Ciudad de inicio:</strong> {p.ciudad_inicio}</p>
-                      <p><strong>Ciudad de destino:</strong> {p.ciudad_destino}</p>
-                      <p><strong>Nombre del destinatario:</strong> {p.nombre_destinatario}</p>
-                      <p><strong>Hora de salida:</strong> {p.hora_salida}</p>
-                    </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {paquetesFiltrados.map((p: any) => (
+                <div key={p.id} className="border-2 p-4 rounded-lg shadow-md">
+                  <p><strong>Nombre del remitente:</strong> {p.nombre_remitente}</p>
+                  <p><strong>Numero de guia:</strong> {p.numero_guia}</p>
+                  <p><strong>Numero de camión:</strong> {p.numero_camion || <span className="text-red-600 font-semibold">[Por llenar]</span>}</p>
+                  <p><strong>Numero de paquetes:</strong> {p.numero_paquetes}</p>
+                  <p><strong>Ciudad de inicio:</strong> {p.ciudad_inicio}</p>
+                  <p><strong>Ciudad de destino:</strong> {p.ciudad_destino}</p>
+                  <p><strong>Nombre del destinatario:</strong> {p.nombre_destinatario}</p>
+                  <p><strong>Hora de marcaje de paquete:</strong>
+                  <br></br>
+                  {" " + p.hora_captura}</p>
+                  <p><strong>Hora de salida del paquete:</strong> {p.hora_salida || <span className="text-red-600 font-semibold">[Por llenar]</span>}</p>
 
-                    <div className="col-start-3 mt-15">
-                      <div className="ml-5 grid grid-cols-1 gap-4">
-                        <button onClick={()=>console.log("hola")} className="button-approve">
-                          Aprovar Paquete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  <div className="mt-4">  
+                  {!pedido_lleno(p) ? (
+                    <button onClick={()=>CompletarPaquete(p)} className="bg-amber-400 button-almost-approve">
+                      Completar paquete
+                    </button>
+                  ) : (
+                    <button onClick={() => console.log("hola")} className="button-approve">
+                      Aprobar Paquete
+                    </button>
+                  )}
+                </div>
+                </div>
+              ))}
+            </div>
             </div>
           );
         })}

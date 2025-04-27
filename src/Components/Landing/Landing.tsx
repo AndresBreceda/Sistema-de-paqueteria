@@ -58,6 +58,9 @@ export default function LandingPage() {
         position: "bottom-left",
         toastId: "success-toast"
       });
+        // GUARDAR número de usuario en localStorage
+        localStorage.setItem('nombre_usuario', data.nombre)  
+
       navigate('/Formulario');
     } else {
       toast.warning("Credenciales inválidas", {

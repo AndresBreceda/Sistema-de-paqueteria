@@ -39,7 +39,7 @@ export default function Paquetes() {
   }
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p className="text-red-600">Error: {error.message}</p>;
 
   const ultimosDiez = [...data].slice(-10).reverse();
 
