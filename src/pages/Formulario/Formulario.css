@@ -29,3 +29,18 @@
 .buttonEdit:hover {
     background-color: #b91c1c;
 }
+
+.button-edit-1{
+    width: auto; /* Se ajusta al contenido */
+    min-width: 150px; /* Tamaño mínimo para mantener equilibrio */
+    padding: 8px 16px; /* Ajuste del padding */
+    font-size: 14px; /* Texto más compacto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease;
+    background-color: oklch(0.828 0.189 84.429);
+    color: white;
+}

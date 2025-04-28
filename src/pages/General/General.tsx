@@ -9,11 +9,11 @@ export default function General() {
             <Header />
 
             <div className="mt-30 mb-20 bg-white p-6 shadow-md rounded-lg">
-                <Paquetes />
+                <Formulario />
             </div>
 
             <div className="bg-white p-6 shadow-md rounded-lg">
-                <Formulario />
+                <Paquetes />
             </div>
         </div>
     );

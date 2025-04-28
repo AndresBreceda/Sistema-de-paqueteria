@@ -75,7 +75,7 @@ export default function TodosLosPaquetes() {
   }
 
   function CompletarPaquete(p: any) {
-    navigate("/Formulario#formulario", { state: { paquete: p } });
+    navigate("/Formulario#formulario", { state: { paquete: p} });
   }
 
   if (isLoading) {
