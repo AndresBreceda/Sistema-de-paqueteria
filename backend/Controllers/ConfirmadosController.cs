@@ -33,22 +33,23 @@ public class ConfirmadosController : ControllerBase
 
     // GET: api/pedidos/{ciudad}
     [HttpGet("{ciudad}")]
-    public async Task<ActionResult<Confirmados>> GetPedido(string ciudad)
+    public async Task<ActionResult<List<Confirmados>>> GetPedidosPorCiudad(string ciudad)
     {
         try
         {
-            var pedido = await _pedidosCollection.Find(p => p.ciudad_destino == ciudad).FirstOrDefaultAsync();
+            var pedidos = await _pedidosCollection.Find(p => p.ciudad_destino == ciudad).ToListAsync();
 
-            if (pedido == null)
-                return NotFound($"El pedido con ID {ciudad} no fue encontrado");
+            if (pedidos == null || pedidos.Count == 0)
+                return NotFound($"No se encontraron pedidos para la ciudad {ciudad}");
 
-            return Ok(pedido);
+            return Ok(pedidos);
         }
         catch (Exception ex)
         {
             return StatusCode(500, $"Error interno del servidor: {ex.Message}");
         }
     }
+
 
     // POST: api/pedidos
     [HttpPost]
