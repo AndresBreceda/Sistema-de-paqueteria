@@ -31,16 +31,16 @@ public class ConfirmadosController : ControllerBase
         }
     }
 
-    // GET: api/pedidos/{id}
-    [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<Confirmados>> GetPedido(string id)
+    // GET: api/pedidos/{ciudad}
+    [HttpGet("{ciudad}")]
+    public async Task<ActionResult<Confirmados>> GetPedido(string ciudad)
     {
         try
         {
-            var pedido = await _pedidosCollection.Find(p => p.id == id).FirstOrDefaultAsync();
+            var pedido = await _pedidosCollection.Find(p => p.ciudad_destino == ciudad).FirstOrDefaultAsync();
 
             if (pedido == null)
-                return NotFound($"El pedido con ID {id} no fue encontrado");
+                return NotFound($"El pedido con ID {ciudad} no fue encontrado");
 
             return Ok(pedido);
         }
@@ -57,7 +57,7 @@ public class ConfirmadosController : ControllerBase
         try
         {
             await _pedidosCollection.InsertOneAsync(confirmo);
-            return CreatedAtAction(nameof(GetPedido), new { id = confirmo.id }, confirmo);
+            return Ok(confirmo);
         }
         catch (Exception ex)
         {

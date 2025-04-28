@@ -196,12 +196,12 @@ useEffect(() => {
         <div className="grid grid-cols-2 gap-4">
           {[
             // { label: "Quien manda:", name: "quien", icon: <User size={20} />, placeholder: "Nombre" },
+            { label: "Nombre del destinatario:", name: "destinatario", icon: <User size={20} />, placeholder: "Nombre del destinatario" },
             { label: "Numero de guia:", name: "guia", icon: <Hash size={20} />, placeholder: "no1234" },
             { label: "Numero de camion:", name: "camion", icon: <Hash size={20} />, placeholder: "no1234" },
             { label: "Numero de paquetes:", name: "paquetes", icon: <Send size={20} />, placeholder: "1", type: "number" },
             { label: "Ciudad de inicio:", name: "inicio", icon: <House size={20} /> },
             { label: "Ciudad de destino:", name: "destino", icon: <House size={20} /> },
-            { label: "Nombre del destinatario:", name: "destinatario", icon: <User size={20} />, placeholder: "Nombre del destinatario" },
             { label: "Peso del paquete", name: "peso", icon: <Weight size={20} />, placeholder: "1 kg", type: "text" },
             { label: "Nombre del articulo", name: "articulo", icon: <Pencil size={20} />, placeholder: "Articulo", type: "text" },
             { label: "Precio", name: "precio", icon: <DollarSign size={20} />, placeholder: "$", type: "text" },

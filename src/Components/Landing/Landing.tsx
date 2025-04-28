@@ -59,7 +59,7 @@ export default function LandingPage() {
         toastId: "success-toast"
       });
         // GUARDAR número de usuario en localStorage
-        localStorage.setItem('nombre_usuario', data.nombre)  
+        localStorage.setItem('nombre_usuario', data.nombre_formulario)  
 
       navigate('/Formulario');
     } else {

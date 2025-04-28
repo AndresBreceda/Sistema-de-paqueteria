@@ -69,7 +69,7 @@ export default function Paquetes() {
           >
             <strong className="text-lg text-blue-900">Nombre del remitente:</strong> {item.nombre_remitente}
             <br />
-            <strong className="text-lg text-blue-900">Número del camión:</strong> {item.numero_camion}
+            <strong className="text-lg text-blue-900">Número del camión:</strong> {item.numero_camion || <span className="text-red-600 font-semibold">[Por llenar]</span>}
             <br />
             <strong className="text-lg text-blue-900">Ciudad de Inicio:</strong> {item.ciudad_inicio}
             <br />
@@ -85,7 +85,7 @@ export default function Paquetes() {
             <br />
             <strong className="text-lg text-blue-900">Artículo:</strong> {item.articulo}
             <br />
-            <strong className="text-lg text-blue-900">Hora de salida:</strong> {item.hora_salida}
+            <strong className="text-lg text-blue-900">Hora de salida:</strong> {item.hora_salida || <span className="text-red-600 font-semibold">[Por llenar]</span>}
             <div className="grid grid-cols-2 gap-4 mt-10">
               <button className="button-edit">Editar</button>
               <button

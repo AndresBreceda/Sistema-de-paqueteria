@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Pedido } from "../pages/Formulario/Formulario";
 
 // Función para eliminar un pedido
 const deleteData = async (pedidoId: KeyUsage) => {
@@ -87,4 +88,27 @@ export const UseGetUsers = (nombre: string) => {
     retry: 3,
     enabled: !!nombre, // previene fetch si id está vacío
   });
+};
+
+export const useCreateConfirm = () => {
+  return useMutation({
+    mutationFn: (p: any) => createPedidoConfirmado(p),
+  });
+}
+
+const createPedidoConfirmado = async (pedido: Pedido): Promise<any> => {
+  const response = await fetch('https://localhost:5001/api/Confirmados', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(pedido),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text(); // <-- leer el mensaje del servidor
+    throw new Error('Error al crear el pedido: ' + errorText);
+  }
+
+  return response.json();
 };
