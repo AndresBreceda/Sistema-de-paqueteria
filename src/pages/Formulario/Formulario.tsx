@@ -191,7 +191,7 @@ export default function Formulario() {
     if (location.hash) {
       const element = document.querySelector(location.hash);
       if (element) {
-        const yOffset = -200; // Mover 100px más arriba
+        const yOffset = -200; // Mover 200px más arriba
         const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
   
         window.scrollTo({ top: y, behavior: 'smooth' });

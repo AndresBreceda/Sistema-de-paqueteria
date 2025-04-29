@@ -34,22 +34,48 @@ export const useDeletePedido = () => {
   });
 };
 
+const fetchDataConfirmados = async (ciudad: string) => {
+  try {
+    const response = await fetch(`https://localhost:5001/api/Confirmados/${ciudad}`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${errorText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+};
+
+export const useGetConfirmados = (ciudad: string, enabled = true) => {
+  return useQuery({
+    queryKey: ["confirmados", ciudad],
+    queryFn: () => fetchDataConfirmados(ciudad),
+    enabled, // desactiva el fetch automático
+    refetchInterval: 3 * 60 * 1000,
+    refetchIntervalInBackground: true,
+    staleTime: 2.5 * 60 * 1000,
+    retry: 3,
+  });
+};
 
 
 const fetchData = async () => {
   try {
-      const response = await fetch("https://localhost:5001/api/Pedidos");
-  
-      // Verificar si la respuesta es válida
-      if (!response.ok) {
-        const errorText = await response.text(); // Intenta obtener el error detallado
-        throw new Error(`HTTP Error: ${response.status} - ${errorText}`);
-      }
-  
-      return response.json();
-    } catch (error) {
-      console.error("Fetch error: ", error); // Log del error en la consola
-      throw error; // React Query manejará este error
+    const response = await fetch(`https://localhost:5001/api/pedidos/`);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP Error: ${response.status} - ${errorText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
   }
 };
 
