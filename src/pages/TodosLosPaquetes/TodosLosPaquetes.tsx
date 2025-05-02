@@ -1,7 +1,7 @@
 import Header from "../../Components/Header/Header";
 import Divider from '@mui/material/Divider';
 import "./styles.css";
-import { Church } from "lucide-react";
+import { Check, Church, Pencil } from "lucide-react";
 import { useGetData } from "../../Hooks/Hooks";
 import { useNavigate } from "react-router-dom";
 import { useDeletePedido } from "../../Hooks/Hooks";
@@ -67,12 +67,12 @@ export default function TodosLosPaquetes() {
 
     const result = await Swal.fire({
       title: '¿Estás seguro?',
-      text: "¿Deseas aprobar y enviar este paquete?",
+      text: "Confirmar de que el paquete fue recibido y este ha sido entregado al cliente",
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, aprobar',
+      confirmButtonText: 'Sí, confirmar',
       cancelButtonText: 'Cancelar'
     });
 
@@ -95,9 +95,9 @@ export default function TodosLosPaquetes() {
       deletePedido(p.id, {
         onSettled: () => setDeletingId(null),
       });
-      Swal.fire('¡Enviado!', 'El paquete ha sido aprobado y enviado correctamente.', 'success');
+      Swal.fire('¡Enviado!', 'El paquete ha sido confirmado de entregado, gracias  .', 'success');
     } else {
-      Swal.fire('Cancelado', 'El paquete no fue enviado.', 'info');
+      Swal.fire('Cancelado', 'El paquete no fue confirmado.', 'info');
     }
   }
 
@@ -187,12 +187,14 @@ export default function TodosLosPaquetes() {
 
                     <div className="mt-4">
                       {!pedido_lleno(p) ? (
-                        <button onClick={() => CompletarPaquete(p)} className="ml-10 bg-amber-400 button-almost-approve">
+                        <button onClick={() => CompletarPaquete(p)} className="flex ml-10 bg-amber-400 button-almost-approve">
+                          <Pencil></Pencil>
                           Completar paquete
                         </button>
                       ) : (
-                        <button onClick={() => aprobarYEliminar(p)} className="ml-10 button-approve">
-                          Aprobar Paquete
+                        <button onClick={() => aprobarYEliminar(p)} className="flex ml-10 button-approve">
+                          <Check></Check>
+                          Confirmar de entregado
                         </button>
                       )}
                     </div>

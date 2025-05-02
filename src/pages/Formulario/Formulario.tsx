@@ -4,6 +4,8 @@ import { useMutation } from "@tanstack/react-query";
 import './Formulario.css';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEditarPedido } from "../../Hooks/Hooks";
+import { agregarImagen } from "../../Components/Ciudad_registro/CiudadComponente";
+import jsPDF from "jspdf";
 
 //agregar hora de salida del camion a la hora del llenado
 //agregar logica para mandar hora de salida y camion
@@ -189,11 +191,99 @@ export default function Formulario() {
     return Object.keys(nuevosErrores).length === 0; // true si no hay errores
   }
 
+  async function imprimirRegistro(paquete: any) {
+    const doc = new jsPDF();
+    const date = new Date();
+    const fechaFormateada = date.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    console.log(paquete);
+
+    const numeroPaquete = `PK-${paquete.destino.slice(0, 3).toUpperCase()}-${date.getTime()}`;
+  
+    doc.setFontSize(16);
+    doc.text(`Paquete del día: ${fechaFormateada}`, 70, 15);
+  
+    doc.setFontSize(10);
+    doc.text(`No. Guía: ${paquete.guia}`, 100, 35);
+    doc.text(`No. Paquete: ${numeroPaquete}`, 140, 35);
+  
+    // Remitente
+    doc.text(`Remitente: ${nombre_cuenta_entrante}`, 100, 40);
+    doc.text(`Ciudad Origen: ${paquete.inicio}`, 100, 45);
+    doc.text(`Hora de salida: ${paquete.hora_salida}`, 100, 50);
+  
+    // Destinatario
+    doc.text("DESTINATARIO - RECIBE:", 100, 60);
+    doc.text(`Destino: ${paquete.destino}`, 100, 65);
+    doc.text(`Nombre: ${paquete.destinatario}`, 100, 70);
+    doc.text("Domicilio: __________________________", 100, 75);
+    doc.text("Colonia: _____________________________", 100, 80);
+    doc.text("Ciudad: ______________________________", 100, 85);
+  
+    // Detalles del paquete
+    doc.text(`Número de paquetes: ${paquete.paquetes}`, 10, 90);
+    doc.text(`Peso: ${paquete.peso} kg`, 10, 95);
+    doc.text(`Artículo: ${paquete.articulo}`, 10, 100);
+    doc.text(`Precio declarado: $${paquete.precio}`, 10, 105);
+    doc.text(`Hora de captura: ${obtenerHoraYFechaSalida()}`, 10, 110);
+    doc.text(`Hora de salida: ${paquete.hora_salida}`, 10, 115);
+  
+    // === Tipo de Servicio (en forma de tabla con casillas) ===
+    doc.text("Tipo de Servicio:", 10, 125);
+    doc.rect(10, 130, 100, 30); // Marco principal
+
+    const servicios = ["E.D.", "S.D.", "OCURRE", "R.D."];
+    let xServicio = 12;
+    let yServicio = 135;
+
+    servicios.forEach((tipo, index) => {
+      doc.rect(xServicio, yServicio, 4, 4); // casilla
+      doc.text(tipo, xServicio + 6, yServicio + 3);
+      xServicio += 24;
+    });
+
+    // === Tabla de Concepto e Importe ===
+    doc.text("CONCEPTO", 10, 170);
+    doc.text("IMPORTE", 80, 170);
+
+    // Cabecera de tabla
+    doc.line(10, 172, 120, 172); // línea horizontal debajo del encabezado
+    doc.line(10, 170, 10, 220); // línea vertical izquierda
+    doc.line(70, 170, 70, 220); // línea vertical separación columna
+    doc.line(120, 170, 120, 220); // línea vertical derecha
+
+    const conceptos = ["FLETE", "E.D.", "R.D.", "SEGURO", "OTROS", "SUB-TOTAL", "I.V.A.", "TOTAL"];
+    let y = 178;
+
+    conceptos.forEach((concepto) => {
+      doc.text(concepto, 12, y);
+      doc.text("__________", 72, y);
+      y += 6;
+    });
+
+    // Línea inferior de la tabla
+    doc.line(10, y - 2, 120, y - 2);
+  
+    // Remitente firma
+    doc.text(`Nombre y Firma del Remitente: ${nombre_cuenta_entrante}`, 10, y + 10);
+    doc.text("_____________________________", 60, y + 10);
+  
+    await agregarImagen(doc);
+  
+    doc.save(`paquete_${numeroPaquete}.pdf`);
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
   
     if (validarCampos()) {
       mutation.mutate(formData);
+
+      imprimirRegistro(formData);
     } else {
       setMessage({ text: 'Por favor completa todos los campos obligatorios.', isError: true });
     }

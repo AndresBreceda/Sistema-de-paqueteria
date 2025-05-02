@@ -8,7 +8,7 @@ interface ComponenteCiudadProps {
   mes: string;
 }
 
-const agregarImagen = async (doc: jsPDF) => {
+export const agregarImagen = async (doc: jsPDF) => {
   const imgUrl = "/logo.png"; // desde la carpeta public
   const img = await fetch(imgUrl);
   const blob = await img.blob();
