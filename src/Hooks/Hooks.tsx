@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pedido } from "../pages/Formulario/Formulario";
 
+
 // Función para eliminar un pedido
 const deleteData = async (pedidoId: KeyUsage) => {
   try {
@@ -138,3 +139,45 @@ const createPedidoConfirmado = async (pedido: Pedido): Promise<any> => {
 
   return response.json();
 };
+
+
+export async function editarPedido(pedido: Pedido): Promise<Pedido> {
+  console.log("nomas pa no confundir " + pedido.id);
+  const response = await fetch(`https://localhost:5001/api/Pedidos/${pedido.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(pedido),
+  });
+
+  const text = await response.text(); // Lee la respuesta como texto primero
+
+  if (!response.ok) {
+    console.error('Error body:', text); // Muestra el texto sin procesar
+    throw new Error('Error al editar el pedido');
+  }
+
+  try {
+    return JSON.parse(text); // Intenta convertir el texto a JSON manualmente
+  } catch (error) {
+    console.error('Error al procesar JSON:', error);
+    throw new Error('Error al procesar la respuesta del servidor');
+  }
+}
+ 
+
+
+export function useEditarPedido() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: editarPedido, // ahora acepta el objeto completo
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['pedidos'] });
+    },
+    onError: (error) => {
+      console.error('Error al editar pedido:', error);
+    },
+  });
+}

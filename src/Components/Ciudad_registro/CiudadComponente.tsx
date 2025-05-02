@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import Divider from "@mui/material/Divider";
 import { useGetConfirmados } from "../../Hooks/Hooks";
+import { useEffect, useState } from "react";
 
 interface ComponenteCiudadProps {
   ciudad: string;
@@ -25,6 +26,25 @@ const agregarImagen = async (doc: jsPDF) => {
 
 const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
   const { data, refetch, isFetching } = useGetConfirmados(ciudad, false); // desactiva fetch automático
+
+  const [ultimaDescarga, setUltimaDescarga] = useState<string | null>(null);
+
+
+  // Cargar la última fecha al montar el componente
+  useEffect(() => {
+    const fechaGuardada = localStorage.getItem("ultimaDescarga");
+    if (fechaGuardada) {
+      setUltimaDescarga(fechaGuardada);
+    }
+  }, []);
+
+  // Manejador del botón
+  const manejarDescarga = () => {
+    const fechaActual = new Date().toLocaleString(); // formato legible
+    setUltimaDescarga(fechaActual);
+    localStorage.setItem("ultimaDescarga", fechaActual);
+
+  };
 
   const handleDescargarPDF = async () => {
     const { data: datosConfirmados } = await refetch(); // ejecuta fetch manualmente
@@ -87,16 +107,38 @@ const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
     doc.text(`Total vendido: $${totalPrecio.toFixed(2)}`, 10, y);
 
     doc.save(`Paquetes_${ciudad}_${mes}.pdf`);
+
+    manejarDescarga();
   };
 
   return (
     <>
     <div className="w-full p-6 rounded-lg text-left border border-blue-900 bg-white shadow mt-10">
+  
+  {/* Título + imagen en la misma línea */}
+  <div className="flex items-center justify-between">
+    <h2 id={ciudad} className="text-blue-900 text-2xl font-semibold scroll-mt-[200px]">
+      {ciudad}
+    </h2>
+    <img
+      src={`public/ciudades/${ciudad}.png`}
+      alt={`Escudo de ${ciudad}`}
+      className="w-10 ml-4"
+    />
+  </div>
 
-    <h2 id={ciudad} className="text-blue-900 text-2xl font-semibold scroll-mt-[200px]">{ciudad}</h2>
+  <Divider sx={{ borderWidth: 3, borderColor: "blue", marginBottom: "10px" }} />
+  
+  <p className="text-gray-700">
+    Paquetes de {ciudad} del mes de {mes}
+  </p>
+  
+  {ultimaDescarga && (
+        <p className="text-blue-950 text-right">
+          Última descarga: {ultimaDescarga}
+        </p>
+      )}
 
-    <Divider sx={{ borderWidth: 3, borderColor: "blue", marginBottom: "10px" }} />
-    <p className="text-gray-700">Paquetes de {ciudad} del mes de {mes}</p>
     <button
       onClick={handleDescargarPDF}
       className="text-blue-600 underline mt-2 inline-block cursor-pointer"

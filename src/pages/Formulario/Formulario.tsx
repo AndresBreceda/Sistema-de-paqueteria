@@ -2,7 +2,8 @@ import { Check, CircleOff, DollarSign, Hash, House, Pencil, Send, Timer, User, W
 import { ChangeEvent, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import './Formulario.css';
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useEditarPedido } from "../../Hooks/Hooks";
 
 //agregar hora de salida del camion a la hora del llenado
 //agregar logica para mandar hora de salida y camion
@@ -13,6 +14,7 @@ const ciudades = [
 ];
 
 export interface Pedido {
+  id?: string;
   pedido?: string;
   nombre_remitente?: string;
   numero_guia: string;
@@ -25,7 +27,7 @@ export interface Pedido {
   articulo: string;
   precio: string;
   hora_salida?: string;
-  hora_captura:string;
+  hora_captura?:string;
 
 }
 
@@ -64,9 +66,19 @@ const createPedido = async (pedido: Pedido): Promise<any> => {
   return response.json();
 };
 
+////////////////
+////////////////
+//////////////// INICIO COMPONENTE
+////////////////
+////////////////
+////////////////
 export default function Formulario() { 
+  const { mutate, isSuccess } = useEditarPedido();
   const location = useLocation();
   const paqueteRecibido = location.state?.paquete;
+  const idPaquete = location.state?.paqueteId;
+  const navigate = useNavigate();
+  
 
   const [formData, setFormData] = useState(() => ({
     guia: paqueteRecibido?.numero_guia || "",
@@ -200,6 +212,49 @@ export default function Formulario() {
   }, [location]);
   
 
+  const handleEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const pedidoEditado = {
+      id: idPaquete, // asegúrate de tener el ID del pedido
+      nombre_remitente: nombre_cuenta_entrante,
+      numero_camion: formData.camion,
+      ciudad_inicio: formData.inicio,
+      nombre_destinatario: formData.destinatario,
+      numero_guia: formData.guia,
+      numero_paquetes: formData.paquetes,
+      ciudad_destino: formData.destino,
+      peso: formData.peso,
+      articulo: formData.articulo,
+      precio: formData.precio,
+      hora_salida: formData.hora_salida,
+      hora_captura: paqueteRecibido.hora_captura
+    };
+  
+    mutate(pedidoEditado);
+
+      setMessage({ text: '¡Pedido Editado exitosamente!'});
+
+      setFormData({
+        guia: "",
+        camion: "",
+        paquetes: "",
+        inicio: "",
+        destino: "",
+        destinatario: "",
+        peso: "",
+        articulo: "",
+        precio: "",
+        hora_salida: ""
+      });
+
+      setTimeout(() => {
+        // Navegar a la página de Pedidos
+
+      }, 3000); // 3 segundos de espera
+      navigate("/Pedidos");
+  };
+
 return (
   <div className="p-6 bg-gray-100 rounded-lg shadow-md">
     <h2 id="formulario" className="text-lg font-semibold mb-4 text-blue-900">Información del paquete</h2>
@@ -211,7 +266,7 @@ return (
   )}
 
 
-    <form className="space-y-4">
+    <form className="space-y-4" onSubmit={handleEdit}>
       <div className="grid grid-cols-2 gap-4">
         {[
           // { label: "Quien manda:", name: "quien", icon: <User size={20} />, placeholder: "Nombre" },
@@ -294,13 +349,12 @@ return (
             <CircleOff size={16} /> Cancelar
           </button>
           <button
-            type="submit"
-            className="bg-amber-400 button-edit-1"
-            disabled={mutation.isPending || mismoLugarError}
-            onClick={handleSubmit}
-          >
-            <Pencil size={16} /> {mutation.isPending ? 'Editando...' : 'Editar'}
-          </button>
+          type="submit"
+          className="bg-amber-400 button-edit-1"
+          disabled={mutation.isPending || mismoLugarError}
+        >
+          <Pencil size={16} /> {mutation.isPending ? 'Editando...' : 'Editar'}
+        </button>
         </div>
       ) : (
         <div className="flex justify-center gap-4 mt-4">
