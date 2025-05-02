@@ -2,7 +2,7 @@ import { Check, CircleOff, DollarSign, Hash, House, Pencil, Send, Timer, User, W
 import { ChangeEvent, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import './Formulario.css';
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEditarPedido } from "../../Hooks/Hooks";
 
 //agregar hora de salida del camion a la hora del llenado
@@ -73,7 +73,7 @@ const createPedido = async (pedido: Pedido): Promise<any> => {
 ////////////////
 ////////////////
 export default function Formulario() { 
-  const { mutate, isSuccess } = useEditarPedido();
+  const { mutate } = useEditarPedido();
   const location = useLocation();
   const paqueteRecibido = location.state?.paquete;
   const idPaquete = location.state?.paqueteId;
@@ -233,7 +233,7 @@ export default function Formulario() {
   
     mutate(pedidoEditado);
 
-      setMessage({ text: '¡Pedido Editado exitosamente!'});
+      setMessage({ text: '¡Pedido editado exitosamente!'});
 
       setFormData({
         guia: "",

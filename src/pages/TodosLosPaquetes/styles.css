@@ -39,4 +39,31 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+.button-base {
+  position: absolute;
+  top: 0.5rem;         /* top-2 */
+  right: 0.5rem;       /* right-2 */
+  color: white;        /* text-white */
+  border-radius: 9999px; /* rounded-full */
+  width: 1.5rem;       /* w-6 */
+  height: 1.5rem;      /* h-6 */
+  display: flex;       
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  font-size: 0.875rem; /* text-sm */
+}
+
+.button-active {
+  background-color: #dc2626; /* bg-red-600 */
+}
+.button-active:hover {
+  background-color: #b91c1c; /* hover:bg-red-700 */
+}
+
+.button-disabled {
+  background-color: #9ca3af; /* bg-gray-400 */
+  cursor: not-allowed;       /* cursor-not-allowed */
+}
+
   

@@ -21,7 +21,7 @@ export default function Paquetes() {
     }
   }, [isSuccess, refetch]);
 
-  async function sureDelete(id: any) {
+   async function sureDelete(id: any) {
     const result = await Swal.fire({
       title: "¿Estás seguro?",
       text: "Esta acción eliminará el paquete de forma permanente.",

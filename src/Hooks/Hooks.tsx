@@ -83,7 +83,7 @@ const fetchData = async () => {
 // Hook personalizado con React Query
 export const useGetData = () => {
     return useQuery({
-      queryKey: ["pedidos"], // Clave de caché
+      queryKey: ["pedidos"],  // Clave de caché
       queryFn: fetchData, // Función de fetch
       refetchInterval: 3 * 60 * 1000, // Refetch cada 3 minutos (en milisegundos)
       refetchIntervalInBackground: true, // Refetch incluso cuando la ventana no está activa
