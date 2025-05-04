@@ -123,7 +123,7 @@ const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
     <img
       src={`public/ciudades/${ciudad}.png`}
       alt={`Escudo de ${ciudad}`}
-      className="w-10 ml-4"
+      className="w-10 ml-4 mb-5"
     />
   </div>
 

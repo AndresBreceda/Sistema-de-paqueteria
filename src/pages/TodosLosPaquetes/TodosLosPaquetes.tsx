@@ -95,7 +95,7 @@ export default function TodosLosPaquetes() {
       deletePedido(p.id, {
         onSettled: () => setDeletingId(null),
       });
-      Swal.fire('¡Enviado!', 'El paquete ha sido confirmado de entregado, gracias  .', 'success');
+      Swal.fire('Confirmado!', 'El paquete ha sido confirmado de entregado, gracias  .', 'success');
     } else {
       Swal.fire('Cancelado', 'El paquete no fue confirmado.', 'info');
     }
