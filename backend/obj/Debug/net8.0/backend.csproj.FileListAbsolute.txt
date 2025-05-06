@@ -38,3 +38,4 @@ C:\git-proyectos\Papa\backend\bin\Debug\net8.0\MongoDB.Driver.dll
 C:\git-proyectos\Papa\backend\bin\Debug\net8.0\SharpCompress.dll
 C:\git-proyectos\Papa\backend\bin\Debug\net8.0\Snappier.dll
 C:\git-proyectos\Papa\backend\bin\Debug\net8.0\ZstdSharp.dll
+C:\git-proyectos\Papa\backend\bin\Debug\net8.0\BCrypt.Net-Next.dll

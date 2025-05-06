@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pedido } from "../pages/Formulario/Formulario";
 
 
@@ -181,3 +181,36 @@ export function useEditarPedido() {
     },
   });
 }
+
+import { useMutation } from "@tanstack/react-query";
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  nombre: string;
+  contraseña: string;
+  nombre_formulario: string;
+}
+
+export const useLoginUser = () => {
+  return useMutation({
+    mutationFn: async ({ email, password }: LoginRequest): Promise<LoginResponse> => {
+      const response = await fetch("https://localhost:5001/api/Log/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombre: email, contraseña: password }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Credenciales inválidas");
+      }
+
+      return response.json();
+    },
+  });
+};

@@ -28,4 +28,13 @@ public class LogService
         return null;
     }
 
+     public async Task CrearUsuario(Log nuevoUsuario)
+    {
+        // Hashea la contraseña antes de guardar
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(nuevoUsuario.contraseña);
+        nuevoUsuario.contraseña = passwordHash;
+
+        await _usuarios.InsertOneAsync(nuevoUsuario);
+    }
+
 }

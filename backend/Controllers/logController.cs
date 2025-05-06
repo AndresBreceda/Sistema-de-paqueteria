@@ -52,4 +52,66 @@ public class LogController : ControllerBase
         }
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult> Login([FromBody] Log request)
+    {
+        try
+        {
+            var usuario = await _usuarios.Find(p => p.nombre == request.nombre).FirstOrDefaultAsync();
+
+            if (usuario == null)
+            {
+                return Unauthorized("Usuario o contraseña incorrectos");
+            }
+
+            // Compara la contraseña hasheada
+            bool contraseñaValida = BCrypt.Net.BCrypt.Verify(request.contraseña, usuario.contraseña);
+            if (!contraseñaValida)
+            {
+                return Unauthorized("Usuario o contraseña incorrectos");
+            }
+
+            return Ok(new
+            {
+                usuario.nombre_formulario,
+                usuario.autorizacion_ciudad
+            });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+    [HttpPost("register")]
+    public async Task<ActionResult> Register([FromBody] Log request)
+    {
+        try
+        {
+            var usuarioExistente = await _usuarios.Find(u => u.nombre == request.nombre).FirstOrDefaultAsync();
+
+            if (usuarioExistente != null)
+            {
+                return BadRequest("Ya existe un usuario con ese email.");
+            }
+
+            var nuevoUsuario = new Log
+            {
+                nombre = request.nombre,
+                contraseña = BCrypt.Net.BCrypt.HashPassword(request.contraseña),
+                nombre_formulario = request.nombre_formulario,
+                autorizacion_ciudad = request.autorizacion_ciudad
+            };
+
+            await _usuarios.InsertOneAsync(nuevoUsuario);
+
+            return Ok("Usuario registrado exitosamente.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+
 }
