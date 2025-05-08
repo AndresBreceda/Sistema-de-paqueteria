@@ -129,8 +129,10 @@ const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
 
   <Divider sx={{ borderWidth: 3, borderColor: "blue", marginBottom: "10px" }} />
   
-  <p className="text-gray-700">
+  <div className="flex">
+  <p className="text-gray-700 mb-5 mr-40">
     Paquetes de {ciudad} del mes de {mes}
+    <br></br>
   </p>
   
   {ultimaDescarga && (
@@ -138,6 +140,7 @@ const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
           Última descarga: {ultimaDescarga}
         </p>
       )}
+  </div>    
 
     <button
       onClick={handleDescargarPDF}

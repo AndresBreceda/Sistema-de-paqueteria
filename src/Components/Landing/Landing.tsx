@@ -26,6 +26,7 @@ export default function LandingPage() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    console.log()
 
     mutate(
       {
@@ -40,6 +41,8 @@ export default function LandingPage() {
 
           // Guarda el nombre del formulario en localStorage
           localStorage.setItem("nombre_usuario", data.nombre_formulario);
+          console.log(data.autorizacion_ciudad);
+          localStorage.setItem("ciudad_autorizada", data.autorizacion_ciudad);
 
           navigate("/Formulario");
         },
