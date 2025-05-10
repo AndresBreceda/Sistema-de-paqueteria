@@ -2,11 +2,17 @@ import { jsPDF } from "jspdf";
 import Divider from "@mui/material/Divider";
 import { useGetConfirmados } from "../../Hooks/Hooks";
 import { useEffect, useState } from "react";
+import encabezadoImg from '../../../public/encabezado.png'; // Usa tu ruta real
+
 
 interface ComponenteCiudadProps {
   ciudad: string;
   mes: string;
 }
+
+export const agregarEncabezado = (doc: jsPDF) => {
+  doc.addImage(encabezadoImg, 'PNG', 0, 0, doc.internal.pageSize.getWidth(), 40);
+};
 
 export const agregarImagen = async (doc: jsPDF) => {
   const imgUrl = "/logo.png"; // desde la carpeta public
@@ -48,68 +54,133 @@ const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
 
   const handleDescargarPDF = async () => {
     const { data: datosConfirmados } = await refetch(); // ejecuta fetch manualmente
-
     const doc = new jsPDF();
-    let date = new Date();
-    let fechaFormateada = date.toLocaleDateString("es-ES", {
+
+    const centerX = doc.internal.pageSize.getWidth() / 2;
+    const pageHeight = doc.internal.pageSize.getHeight();
+  
+    const date = new Date();
+    const fechaFormateada = date.toLocaleDateString("es-ES", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
     });
-
+  
+    await agregarImagen(doc);
+  
+    doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
     doc.text(`Descarga del día: ${fechaFormateada}`, 90, 25);
     doc.text(`Paquetes de ${ciudad} - ${mes}`, 90, 35);
-
-    await agregarImagen(doc);
-
+  
     const headers = ["Guía", "Remitente", "Destinatario", "Origen", "Destino", "Artículo", "Peso", "Precio"];
-    const startY = 60;
-    doc.setFontSize(10);
-    let y = startY;
-
-    headers.forEach((header, index) => {
-      doc.text(header, 10 + index * 25, y);
-    });
-
-    y += 7;
-
+  
+    let y = 60;
     let totalPrecio = 0;
     let totalPaquetes = 0;
+    let pageNumber = 1;
 
+    const addFooter = () => {
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Página ${pageNumber}`, centerX, pageHeight - 10, { align: "center" });
+    };
+  
+    // Agrupar por fecha
+    const agrupadosPorFecha: Record<string, any[]> = {};
     datosConfirmados?.forEach((item: any) => {
-      const precio = parseFloat(item.precio) || 0;
-      const paquetes = parseInt(item.numero_paquetes) || 0;
-
-      totalPrecio += precio;
-      totalPaquetes += paquetes;
-
-      doc.text(item.numero_guia || "", 10, y);
-      doc.text(item.nombre_remitente || "", 35, y);
-      doc.text(item.nombre_destinatario || "", 60, y);
-      doc.text(item.ciudad_inicio || "", 85, y);
-      doc.text(item.ciudad_destino || "", 110, y);
-      doc.text(item.articulo || "", 135, y);
-      doc.text(item.peso || "", 160, y);
-      doc.text(`$${precio.toFixed(2)}`, 185, y);
+      const match = item.hora_captura?.match(/Dia:(\d{4}-\d{2}-\d{2})/);
+      const fecha = match?.[1] || "Sin fecha";
+      if (!agrupadosPorFecha[fecha]) {
+        agrupadosPorFecha[fecha] = [];
+      }
+      agrupadosPorFecha[fecha].push(item);
+    });
+  
+    for (const fecha in agrupadosPorFecha) {
+      const paquetesDelDia = agrupadosPorFecha[fecha];
+      let subtotalPrecio = 0;
+      let subtotalPaquetes = 0;
+  
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(12);
+      doc.text(`--- Fecha de carga: ${fecha} ---`, 80, y);
       y += 7;
+  
+      doc.setFontSize(10);
 
+      headers.forEach((header, index) => {
+        doc.text(header, 10 + index * 25, y);
+      });
+      y += 6;
+  
+      doc.setFont("helvetica", "normal");
+      for (const item of paquetesDelDia) {
+        const precio = parseFloat(item.precio) || 0;
+        const paquetes = parseInt(item.numero_paquetes) || 0;
+  
+        subtotalPrecio += precio;
+        subtotalPaquetes += paquetes;
+        totalPrecio += precio;
+        totalPaquetes += paquetes;
+  
+        doc.text(item.numero_guia || "", 10, y);
+        doc.text(item.nombre_remitente || "", 35, y);
+        doc.text(item.nombre_destinatario || "", 60, y);
+        doc.text(item.ciudad_inicio || "", 85, y);
+        doc.text(item.ciudad_destino || "", 110, y);
+        doc.text(item.articulo || "", 135, y);
+        doc.text(item.peso || "", 160, y);
+        doc.text(`$${precio.toFixed(2)}`, 185, y);
+        y += 7;
+  
+        if (y > 280) {
+          addFooter();
+          doc.addPage();
+          pageNumber++;
+          // agregarEncabezado(doc);
+          y = 60;
+        }
+      }
+  
+      doc.setFont("helvetica", "bold");
+      doc.text(`Total paquetes del día: ${subtotalPaquetes}`, 10, y);
+      y += 6;
+      doc.text(`Total vendido del día: $${subtotalPrecio.toFixed(2)}`, 10, y);
+      doc.setFont("helvetica", "normal");
+      y += 10;
+
+      if (y > pageHeight - 20) {
+        addFooter();
+        doc.addPage();
+        pageNumber++;
+        agregarEncabezado(doc);
+        y = 60;
+      }
+      
+  
       if (y > 280) {
         doc.addPage();
         y = 20;
       }
-    });
-
+    }
+  
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
     y += 10;
-    doc.setFontSize(12);
-    doc.text(`Total de paquetes: ${totalPaquetes}`, 10, y);
-    y += 7;
-    doc.text(`Total vendido: $${totalPrecio.toFixed(2)}`, 10, y);
+    doc.text(`Total general de paquetes: ${totalPaquetes}`, 10, y);
+    y += 6;
+    doc.text(`Total general vendido: $${totalPrecio.toFixed(2)}`, 10, y);
 
+    addFooter();
+  
     doc.save(`Paquetes_${ciudad}_${mes}.pdf`);
-
+  
     manejarDescarga();
   };
+  
+  
+  
 
   return (
     <>

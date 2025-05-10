@@ -6,9 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEditarPedido } from "../../Hooks/Hooks";
 import { agregarImagen } from "../../Components/Ciudad_registro/CiudadComponente";
 import jsPDF from "jspdf";
-
-//agregar hora de salida del camion a la hora del llenado
-//agregar logica para mandar hora de salida y camion
+import { agregarEncabezado } from "../../Components/Ciudad_registro/CiudadComponente";
 
 const ciudades = [
   "Aguascalientes", "Calvillo", "Jalpa", "Tabasco", "Juchipila",
@@ -200,7 +198,7 @@ export default function Formulario() {
       year: "numeric",
     });
 
-    console.log(paquete);
+    agregarEncabezado(doc);
 
     const numeroPaquete = `PK-${paquete.destino.slice(0, 3).toUpperCase()}-${date.getTime()}`;
   
