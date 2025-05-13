@@ -203,72 +203,100 @@ export default function Formulario() {
     const numeroPaquete = `PK-${paquete.destino.slice(0, 3).toUpperCase()}-${date.getTime()}`;
   
     doc.setFontSize(16);
-    doc.text(`Paquete del día: ${fechaFormateada}`, 70, 15);
-  
-    doc.setFontSize(10);
-    doc.text(`No. Guía: ${paquete.guia}`, 100, 35);
-    doc.text(`No. Paquete: ${numeroPaquete}`, 140, 35);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Paquete del día: ${fechaFormateada}`, 100, 35);
+    doc.text(`No. Paquete: ${numeroPaquete}`, 100, 40);
+    doc.text(`No. Guía: ${paquete.guia}`, 100, 45);
   
     // Remitente
-    doc.text(`Remitente: ${nombre_cuenta_entrante}`, 100, 40);
-    doc.text(`Ciudad Origen: ${paquete.inicio}`, 100, 45);
-    doc.text(`Hora de salida: ${paquete.hora_salida}`, 100, 50);
+    doc.text(`Remitente-Envia:`, 30, 70); 
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Nombre: ${nombre_cuenta_entrante}`, 10, 75);
+    doc.text(`Ciudad Origen: ${paquete.inicio}`, 10, 80);
+    doc.text(`Hora de salida: ${paquete.hora_salida}`,10, 85);
   
     // Destinatario
-    doc.text("DESTINATARIO - RECIBE:", 100, 60);
-    doc.text(`Destino: ${paquete.destino}`, 100, 65);
-    doc.text(`Nombre: ${paquete.destinatario}`, 100, 70);
-    doc.text("Domicilio: __________________________", 100, 75);
-    doc.text("Colonia: _____________________________", 100, 80);
-    doc.text("Ciudad: ______________________________", 100, 85);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("Destinatario - Recibe:", 100, 70);
+    
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Nombre: ${paquete.destinatario}`, 100, 75);
+    doc.text(`Destino: ${paquete.destino}`, 100, 80);
+    doc.text("Domicilio: __________________________", 100, 85);
+    doc.text("Colonia: _____________________________", 100, 90);
   
     // Detalles del paquete
-    doc.text(`Número de paquetes: ${paquete.paquetes}`, 10, 90);
-    doc.text(`Peso: ${paquete.peso} kg`, 10, 95);
-    doc.text(`Artículo: ${paquete.articulo}`, 10, 100);
-    doc.text(`Precio declarado: $${paquete.precio}`, 10, 105);
-    doc.text(`Hora de captura: ${obtenerHoraYFechaSalida()}`, 10, 110);
-    doc.text(`Hora de salida: ${paquete.hora_salida}`, 10, 115);
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Dtalles del paquete`, 30, 100);
+
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Número de paquetes: ${paquete.paquetes}`, 10, 105);
+    doc.text(`Peso: ${paquete.peso} kg`, 10, 110);
+    doc.text(`Artículo: ${paquete.articulo}`, 10, 115);
+    doc.text(`Precio declarado: $${paquete.precio}`, 10, 120);
+    doc.text(`Hora de captura:`, 10, 125);
+    doc.text(`${obtenerHoraYFechaSalida()}`, 10, 130)
+    doc.text(`Hora de salida: ${paquete.hora_salida}`, 10, 135);
   
     // === Tipo de Servicio (en forma de tabla con casillas) ===
-    doc.text("Tipo de Servicio:", 10, 125);
-    doc.rect(10, 130, 100, 30); // Marco principal
+    const yInicioTablas = 145;
+        doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("Tipo de Servicio:", 30, yInicioTablas);
+    doc.rect(10, yInicioTablas + 5, 80, 20); // Marco de servicio
 
-    const servicios = ["E.D.", "S.D.", "OCURRE", "R.D."];
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    const servicios = ["E.D.", "S.D.", "OCU", "R.D."]; //OCU en vez de ocurre
     let xServicio = 12;
-    let yServicio = 135;
+    let yServicio = yInicioTablas + 10;
 
     servicios.forEach((tipo, index) => {
       doc.rect(xServicio, yServicio, 4, 4); // casilla
       doc.text(tipo, xServicio + 6, yServicio + 3);
-      xServicio += 24;
+      xServicio += 18;
     });
 
     // === Tabla de Concepto e Importe ===
-    doc.text("CONCEPTO", 10, 170);
-    doc.text("IMPORTE", 80, 170);
+    const xTablaImporte = 100;
+    const yTablaImporte = yInicioTablas + 5;
 
-    // Cabecera de tabla
-    doc.line(10, 172, 120, 172); // línea horizontal debajo del encabezado
-    doc.line(10, 170, 10, 220); // línea vertical izquierda
-    doc.line(70, 170, 70, 220); // línea vertical separación columna
-    doc.line(120, 170, 120, 220); // línea vertical derecha
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("CONCEPTO", xTablaImporte, yTablaImporte);
+    doc.text("IMPORTE", xTablaImporte + 50, yTablaImporte);
+
+    // Cabecera
+        doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.line(xTablaImporte, yTablaImporte + 2, xTablaImporte + 80, yTablaImporte + 2); // Horizontal
+    doc.line(xTablaImporte, yTablaImporte, xTablaImporte, yTablaImporte + 50); // Izquierda
+    doc.line(xTablaImporte + 40, yTablaImporte, xTablaImporte + 40, yTablaImporte + 50); // Columna media
+    doc.line(xTablaImporte + 80, yTablaImporte, xTablaImporte + 80, yTablaImporte + 50); // Derecha
 
     const conceptos = ["FLETE", "E.D.", "R.D.", "SEGURO", "OTROS", "SUB-TOTAL", "I.V.A.", "TOTAL"];
-    let y = 178;
+    let y = yTablaImporte + 8;
 
     conceptos.forEach((concepto) => {
-      doc.text(concepto, 12, y);
-      doc.text("__________", 72, y);
+      doc.text(concepto, xTablaImporte + 2, y);
+      doc.text("__________", xTablaImporte + 42, y);
       y += 6;
     });
 
-    // Línea inferior de la tabla
-    doc.line(10, y - 2, 120, y - 2);
-  
-    // Remitente firma
-    doc.text(`Nombre y Firma del Remitente: ${nombre_cuenta_entrante}`, 10, y + 10);
-    doc.text("_____________________________", 60, y + 10);
+    // Línea inferior
+    doc.line(xTablaImporte, y - 2, xTablaImporte + 80, y - 2);
+
+    // === Firma del remitente (centrada abajo) ===
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text("Nombre y Firma del Remitente:", 70, 250);
+    doc.text("_____________________________", 70, 255);
   
     await agregarImagen(doc);
   

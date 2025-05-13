@@ -66,6 +66,7 @@ const ComponenteCiudad: React.FC<ComponenteCiudadProps> = ({ ciudad, mes }) => {
       year: "numeric",
     });
   
+    agregarEncabezado(doc);
     await agregarImagen(doc);
   
     doc.setFont("helvetica", "bold");
