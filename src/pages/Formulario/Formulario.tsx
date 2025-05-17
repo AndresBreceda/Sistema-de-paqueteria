@@ -216,6 +216,13 @@ export default function Formulario() {
     doc.text(`Nombre: ${nombre_cuenta_entrante}`, 10, 75);
     doc.text(`Ciudad Origen: ${paquete.inicio}`, 10, 80);
     doc.text(`Hora de salida: ${paquete.hora_salida}`,10, 85);
+
+    // Rectángulo vacío para observaciones
+    doc.setFontSize(16);
+    doc.setFont("helvetica", "bold");
+    doc.text("Observaciones:", 100, 100);
+    doc.setFont("helvetica", "normal");
+    doc.rect(100, 105, 90, 30); 
   
     // Destinatario
     doc.setFontSize(16);
