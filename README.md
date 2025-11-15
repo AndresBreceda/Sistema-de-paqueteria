@@ -43,10 +43,10 @@ Permite registrar pedidos, filtrarlos por ciudad, consultar estados, administrar
 
 ### Endpoints principales
 Pedidos
-GET	/api/pedidos	Obtener todos los pedidos
-GET	/api/pedidos/{id}	Obtener pedido por ID
-GET	/api/pedidos/ciudad/{ciudad}	Filtrar por ciudad
-POST	/api/pedidos	Crear un pedido
-PUT	/api/pedidos/{id}	Actualizar un pedido
-DELETE	/api/pedidos/{id}	Eliminar un pedido
+-GET	/api/pedidos	Obtener todos los pedidos
+-GET	/api/pedidos/{id}	Obtener pedido por ID
+-GET	/api/pedidos/ciudad/{ciudad}	Filtrar por ciudad
+-POST	/api/pedidos	Crear un pedido
+-PUT	/api/pedidos/{id}	Actualizar un pedido
+-DELETE	/api/pedidos/{id}	Eliminar un pedido
 
