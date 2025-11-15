@@ -23,8 +23,6 @@ Permite registrar pedidos, filtrarlos por ciudad, consultar estados, administrar
 ---
 
 
----
-
 ## 🗄️ Funcionalidades principales
 
 ### **Frontend**
